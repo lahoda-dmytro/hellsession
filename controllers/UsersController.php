@@ -2,7 +2,9 @@
 
 namespace controllers;
 
-class UsersController
+use classes\Controller;
+
+class UsersController extends Controller
 {
 
 }

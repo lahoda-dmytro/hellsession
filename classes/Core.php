@@ -4,10 +4,12 @@ namespace classes;
 
 class Core
 {
+        public string $module = '';
+        public string $action = '';
         private static $instance = null;
         protected Template $mainTemplate;
         private function __construct(){
-            $this->mainTemplate = new Template("layout/index.php");
+            $this->mainTemplate = new Template("layouts/index.php");
         }
 
         public static function getInstance(){
@@ -24,18 +26,20 @@ class Core
             $route = $_GET['route'] ?? '';
             $route_parts = explode('/', $route);
 
-            $module = array_shift($route_parts);
-            $action = array_shift($route_parts);
+            $this->module = array_shift($route_parts) ?? '';
+            $this->action = array_shift($route_parts) ?? '';
 
-            if (empty($module)) {
+            $class_name = 'controllers\\' . ucfirst($this->module) . 'Controller';
+            $method = $this->action . 'Action';
+
+
+            if (empty($this->module)) {
                 $module = 'products'; // 'home', 'main'
             }
-            if (empty($action)) {
+            if (empty($this->action)) {
                 $action = 'list';
             }
 
-            $class_name = 'controllers\\' . ucfirst($module) . 'Controller';
-            $method = $action . 'Action';
 
             if(!class_exists($class_name)) {
                 $this->error(404);
@@ -47,7 +51,6 @@ class Core
                 $this->error(404);
                 return;
             }
-            $this->mainTemplate = new Template("layout/index.php");
 
             if (!empty($params)) {
                 $data = call_user_func_array([$controller, $method], $params);
@@ -61,15 +64,8 @@ class Core
 
             $this->mainTemplate->addParams($data);
 
-//
-//            $data = $controller->$method();
-//            $this->mainTemplate->addParams($data);
-
-//            $data = $controller->$method();
-//            $this->mainTemplate->addParams($data);
-
-
         }
+
         public function done(){
             $this->mainTemplate->display();
         }
@@ -83,5 +79,4 @@ class Core
             $errorTemplate->display();
             die;
         }
-
 }
