@@ -3,13 +3,26 @@
 namespace classes;
 
 class Core {
+    public string $defaultLayoutPath = 'layouts/index.php';
     public string $module = '';
     public string $action = '';
+    public Database $db;
     private static ?Core $instance = null;
     protected Template $mainTemplate;
 
     private function __construct() {
-        $this->mainTemplate = new Template("layouts/index.php");
+
+        $config = Config::getInstance();
+
+        $host = $config->dbhost;
+        $name = $config->dbname;
+        $user = $config->dbuser;
+        $pass = $config->dbpass;
+
+        $this->db = new Database($host, $name, $user, $pass);
+
+        $this->mainTemplate = new Template($this->defaultLayoutPath);
+
     }
 
     public static function getInstance(): Core {

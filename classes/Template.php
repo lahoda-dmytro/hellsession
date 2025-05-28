@@ -3,11 +3,10 @@
 namespace classes;
 
 class Template {
-    protected array $params;
+    protected array $params = [];
     protected string $template_filepath;
 
     public function __construct(string $filepath) {
-        $this->params = [];
         $this->template_filepath = $filepath;
     }
 
@@ -30,8 +29,7 @@ class Template {
     public function render(): string {
 
         if (!file_exists($this->template_filepath)) {
-            error_log("Template file not found: " . $this->template_filepath);
-            return "";
+            throw new \RuntimeException("Template file not found: " . $this->template_filepath);
         }
 
         extract($this->params);
