@@ -2,81 +2,81 @@
 
 namespace classes;
 
-class Core
-{
-        public string $module = '';
-        public string $action = '';
-        private static $instance = null;
-        protected Template $mainTemplate;
-        private function __construct(){
-            $this->mainTemplate = new Template("layouts/index.php");
+class Core {
+    public string $module = '';
+    public string $action = '';
+    private static ?Core $instance = null;
+    protected Template $mainTemplate;
+
+    private function __construct() {
+        $this->mainTemplate = new Template("layouts/index.php");
+    }
+
+    public static function getInstance(): Core {
+        if (is_null(self::$instance))
+            self::$instance = new self();
+
+        return self::$instance;
+    }
+
+    public function init(): void {
+        session_start();
+    }
+
+    public function run(): void {
+        $route = $_GET['route'] ?? '';
+        $route_parts = explode('/', $route);
+
+        if (empty($route_parts[0])) {
+            $this->module = 'site';
+            $this->action = 'index';
+
+            $params = [];
+        } else {
+            $this->module = array_shift($route_parts);
+            $this->action = array_shift($route_parts) ?? 'index';
+
+            $params = $route_parts;
         }
 
-        public static function getInstance(){
-            if(is_null(self::$instance)){
-                self::$instance = new self();
-            }
-            return self::$instance;
+
+        $class_name = 'controllers\\' . ucfirst($this->module) . 'Controller';
+        $method = $this->action . 'Action';
+
+
+        if (!class_exists($class_name)) {
+            $this->error(404);
+            return;
         }
 
-        public function init(){
-            session_start();
-        }
-        public function run(){
-            $route = $_GET['route'] ?? '';
-            $route_parts = explode('/', $route);
+        $controller = new $class_name();
 
-            $this->module = array_shift($route_parts) ?? '';
-            $this->action = array_shift($route_parts) ?? '';
-
-            $class_name = 'controllers\\' . ucfirst($this->module) . 'Controller';
-            $method = $this->action . 'Action';
-
-
-            if (empty($this->module)) {
-                $module = 'products'; // 'home', 'main'
-            }
-            if (empty($this->action)) {
-                $action = 'list';
-            }
-
-
-            if(!class_exists($class_name)) {
-                $this->error(404);
-                return;
-            }
-            $controller = new $class_name();
-
-            if(!method_exists($controller, $method)) {
-                $this->error(404);
-                return;
-            }
-
-            if (!empty($params)) {
-                $data = call_user_func_array([$controller, $method], $params);
-            } else {
-                $data = $controller->$method();
-            }
-
-            if (!is_array($data)) {
-                $data = [];
-            }
-
-            $this->mainTemplate->addParams($data);
-
+        if (!method_exists($controller, $method)) {
+            $this->error(404);
+            return;
         }
 
-        public function done(){
-            $this->mainTemplate->display();
+        $data = call_user_func_array([$controller, $method], $params);
+
+        if (!is_array($data)) {
+            $data = [];
         }
 
-        public function error(int $code){
-            http_response_code($code);
+        $this->mainTemplate->addParams($data);
 
-            $errorTemplate = new Template("views/error/{$code}.php");
-            $errorTemplate->addParam('errorMessage', "Something went wrong! Error: {$code}");
-            ob_clean();
-            $errorTemplate->display();
-            die;
-        }
+    }
+
+    public function done(): void {
+        $this->mainTemplate->display();
+    }
+
+    public function error(int $code): void {
+        http_response_code($code);
+
+        $errorTemplate = new Template("views/error/{$code}.php");
+        $errorTemplate->addParam('errorMessage', "Something went wrong! Error: {$code}");
+        ob_clean();
+        $errorTemplate->display();
+        die;
+    }
 }

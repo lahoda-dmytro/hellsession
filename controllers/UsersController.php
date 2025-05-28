@@ -4,7 +4,6 @@ namespace controllers;
 
 use classes\Controller;
 
-class UsersController extends Controller
-{
+class UsersController extends Controller {
 
 }

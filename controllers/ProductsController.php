@@ -3,18 +3,15 @@
 namespace controllers;
 
 use classes\Controller;
-use classes\Template;
 
-class ProductsController extends Controller
-{
-    public function listAction(){
-        $template = new Template('views/product/list.php');
-        $products = ['test_item_1', 'test_item_2'];
-        return $this->view('list of products', ['products' => $products]);
+class ProductsController extends Controller {
+    public function indexAction(): array {
+        $products = ['Item 1', 'Item 2', 'Item 3'];
+        return $this->view('Products Page', ['products' => $products]);
     }
-    public function addAction(){
-        $template = new Template('views/product/add.php');
-        return $this->view('added product');
 
+    public function addAction(): array {
+        return $this->view('Add New Product');
     }
+
 }
