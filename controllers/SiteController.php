@@ -10,7 +10,10 @@ class SiteController extends Controller {
         $core = Core::getInstance();
         $db = $core->db;
 
-        $categories = $db->select('categories', ['id', 'name']);
+        //$categories = $db->insert('categories', ['name' => 'Necklaces', 'slug'=>'necklaces']);
+        //$categories = $db->select('categories', ['id', 'name']);
+        //$categories = $db->select('categories', ['id', 'name'], ['id' => 3]);
+        $categories = $db->delete('categories', ['id' => 3]);
 
         if (empty($categories)) {
             $this->addData(['message' => 'Не знайдено жодної категорії.']);
@@ -20,4 +23,5 @@ class SiteController extends Controller {
 
         return $this->view('Список Категорій', $this->data);
     }
+
 }

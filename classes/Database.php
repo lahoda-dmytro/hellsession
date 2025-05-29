@@ -7,6 +7,7 @@ use PDOException;
 
 class Database {
     public ?PDO $pdo = null;
+
     public function __construct(string $host, string $name, string $user, string $pass) {
         try {
             $dsn = "mysql:host=$host;dbname=$name;charset=utf8mb4";
@@ -25,20 +26,90 @@ class Database {
     public function getConnection(): ?PDO {
         return $this->pdo;
     }
-    public function select($table, $fields = "*", $where = null) {
-        if (is_array($fields)) {
-            $fields_string = implode(',', $fields);
-        } else if (is_string($fields)) {
-            $fields_string = $fields;
-        } else {
-            $fields_string = "*";
-        }
 
-        $sql = "SELECT {$fields_string} FROM {$table}";
-        if ($where !== null) {
-            $sql .= " WHERE {$where}";
+    protected function where(array $where): array {
+        $whereClauses = [];
+        $params = [];
+        if (!empty($where)) {
+            foreach ($where as $key => $value) {
+                $whereClauses[] = "`{$key}` = :{$key}";
+                $params[":{$key}"] = $value;
+            }
         }
-        return $this->pdo->query($sql)->fetchAll();
+        return [implode(' AND ', $whereClauses), $params];
     }
 
+    public function select(string $table, $fields = "*", array $where = []): array {
+        if (is_array($fields)) {
+            $fields_string = implode(', ', $fields);
+        } else {
+            $fields_string = $fields;
+        }
+
+        $sql = "SELECT {$fields_string} FROM `{$table}`";
+
+        list($whereClause, $params) = $this->where($where);
+
+        if (!empty($whereClause)) {
+            $sql .= " WHERE " . $whereClause;
+        }
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params);
+        return $sth->fetchAll();
+    }
+
+    public function insert(string $table, array $row_to_insert): int {
+        $fields_list = implode(", ", array_keys($row_to_insert));
+        $params_array = [];
+        foreach ($row_to_insert as $key => $value) {
+            $params_array[] = ":{$key}";
+        }
+        $params_list = implode(", ", $params_array);
+        $sql = "INSERT INTO `{$table}` ({$fields_list}) VALUES ({$params_list})";
+        $sth = $this->pdo->prepare($sql);
+
+        foreach ($row_to_insert as $key => $value) {
+            $sth->bindValue(":{$key}", $value);
+        }
+
+        $sth->execute();
+        return $this->pdo->lastInsertId();
+    }
+
+    public function delete(string $table, array $where = []): int {
+        $sql = "DELETE FROM `{$table}`";
+        list($whereClause, $params) = $this->where($where);
+
+        if (!empty($whereClause)) {
+            $sql .= " WHERE " . $whereClause;
+        }
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
+
+    public function update(string $table, array $row_to_update, array $where = []): int {
+        $set_clauses = [];
+        $update_params = [];
+
+        foreach ($row_to_update as $key => $value) {
+            $set_clauses[] = "`{$key}` = :update_{$key}";
+            $update_params[":update_{$key}"] = $value;
+        }
+
+        $sql = "UPDATE `{$table}` SET " . implode(', ', $set_clauses);
+        list($whereClause, $where_params) = $this->where($where);
+
+        if (!empty($whereClause)) {
+            $sql .= " WHERE " . $whereClause;
+        }
+
+        $params = array_merge($update_params, $where_params);
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
 }
