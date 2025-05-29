@@ -11,9 +11,9 @@ class Database {
         try {
             $dsn = "mysql:host=$host;dbname=$name;charset=utf8mb4";
             $options = [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // режим помилок: кидати винятки
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // режим вибірки: асоціативний масив
-                PDO::ATTR_EMULATE_PREPARES   => false,                // вимкнути емуляцію підготовлених запитів
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
             ];
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
@@ -38,7 +38,7 @@ class Database {
         if ($where !== null) {
             $sql .= " WHERE {$where}";
         }
-        return $this->pdo->query($sql)->fetchAll(); // Приклад для простого запиту
+        return $this->pdo->query($sql)->fetchAll();
     }
 
 }
