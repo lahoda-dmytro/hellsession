@@ -7,8 +7,6 @@ class Config {
     protected array $params = [];
     protected static ?Config $instance = null;
     private function __construct() {
-        /** @var TYPE_NAME $Config */
-
         $directory = 'config';
         $config_files = scandir($directory);
 
@@ -20,7 +18,8 @@ class Config {
 
                 if (is_array($config_data)) {
                     $this->params = array_merge($this->params, $config_data);
-                } else {
+                }
+                else {
                     error_log("Config file '{$path}' did not return an array.");
                 }
             }

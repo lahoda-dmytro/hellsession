@@ -1,6 +1,6 @@
 <?php
 
-$Config[] = [
+return [
     'dbhost' => 'localhost',
     'dbname' => 'hellsession',
     'dbuser' => 'hellsession',

@@ -19,7 +19,14 @@ class Core {
         $user = $config->dbuser;
         $pass = $config->dbpass;
 
-        $this->db = new Database($host, $name, $user, $pass);
+        try {
+            $this->db = new Database($host, $name, $user, $pass);
+        }
+        catch (\RuntimeException $e) {
+            error_log("Core initialization failed: " . $e->getMessage());
+            $this->error(500);
+            die;
+        }
 
         $this->mainTemplate = new Template($this->defaultLayoutPath);
 
@@ -45,7 +52,8 @@ class Core {
             $this->action = 'index';
 
             $params = [];
-        } else {
+        }
+        else {
             $this->module = array_shift($route_parts);
             $this->action = array_shift($route_parts) ?? 'index';
 
@@ -62,16 +70,32 @@ class Core {
             return;
         }
 
-        $controller = new $class_name();
+        try {
+            $controller = new $class_name();
+        }
+        catch (\Throwable $e) {
+            error_log("Error creating controller '{$class_name}': " . $e->getMessage());
+            $this->error(500);
+            return;
+        }
+
 
         if (!method_exists($controller, $method)) {
             $this->error(404);
             return;
         }
 
-        $data = call_user_func_array([$controller, $method], $params);
+        try {
+            $data = call_user_func_array([$controller, $method], $params);
+        }
+        catch (\Throwable $e) {
+            error_log("Error executing controller method '{$class_name}::{$method}': " . $e->getMessage());
+            $this->error(500);
+            return;
+        }
 
         if (!is_array($data)) {
+            error_log("Controller method {$class_name}::{$method} did not return an array. Returned type: " . gettype($data));
             $data = [];
         }
 
@@ -86,10 +110,27 @@ class Core {
     public function error(int $code): void {
         http_response_code($code);
 
-        $errorTemplate = new Template("views/error/{$code}.php");
-        $errorTemplate->addParam('errorMessage', "Something went wrong! Error: {$code}");
-        ob_clean();
-        $errorTemplate->display();
+        try {
+            $errorTemplate = new Template("views/error/{$code}.php");
+            $errorMessage = "Something went wrong! Error: {$code}.";
+            if ($code === 404) {
+                $errorMessage = "Page not found.";
+            }
+            elseif ($code === 500) {
+                $errorMessage = "Internal server error.";
+            }
+            $errorTemplate->addParam('errorMessage', $errorMessage);
+
+            ob_clean();
+            $errorTemplate->display();
+        }
+        catch (\RuntimeException $e) {
+            error_log("Error template not found or rendering failed: " . $e->getMessage());
+            if (!headers_sent()) {
+                http_response_code($code);
+            }
+            echo "<h1>Error {$code}</h1><p>An unexpected error occurred.</p>";
+        }
         die;
     }
 }
