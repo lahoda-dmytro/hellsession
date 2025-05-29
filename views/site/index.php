@@ -1,14 +1,22 @@
-<h1><?= $Title ?? 'Сторінка' ?></h1>
+<?php
+/**
+ * @var string $message
+ * @var string $title
+ * @var array $latestProducts
+ */
+?>
+<h1><?= htmlspecialchars($message ?? 'welcome') ?></h1>
+<p>Main page"<?= htmlspecialchars($title ?? 'Hell session') ?>".</p>
 
-<?php if (!empty($categories) && is_array($categories)): ?>
-    <h2>Категорії:</h2>
+<?php /*
+if (isset($latestProducts) && !empty($latestProducts)): ?>
+    <h2>Останні товари:</h2>
     <ul>
-        <?php foreach ($categories as $category): ?>
-            <li>ID: <?= htmlspecialchars($category['id']) ?>, Назва: <?= htmlspecialchars($category['name']) ?></li>
+        <?php foreach ($latestProducts as $product): ?>
+            <li><?= htmlspecialchars($product->name) ?> - <?= htmlspecialchars($product->price) ?> $</li>
         <?php endforeach; ?>
     </ul>
-<?php elseif (isset($message)): ?>
-    <p><?= htmlspecialchars($message) ?></p>
-<?php else: ?>
-    <p>Дані про категорії не були отримані або виникла помилка.</p>
-<?php endif; ?>
+<?php endif;
+*/ ?>
+
+<p>go to <a href="/?route=category/index">category</a> або <a href="/?route=products/index">products</a>.</p>
