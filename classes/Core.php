@@ -9,6 +9,8 @@ class Core {
     public Database $db;
     private static ?Core $instance = null;
     protected Template $mainTemplate;
+    public $session;
+
 
     private function __construct() {
 
@@ -30,6 +32,7 @@ class Core {
 
         $this->mainTemplate = new Template($this->defaultLayoutPath);
 
+        $this->session = new Session();
     }
 
     public static function getInstance(): Core {

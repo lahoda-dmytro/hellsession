@@ -29,9 +29,4 @@ class Controller {
         ];
     }
 
-    protected function renderView(string $relativePath): void {
-        $this->template->setTemplateFilePath("views/" . $relativePath);
-    }
-
-
 }
