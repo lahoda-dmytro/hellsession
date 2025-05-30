@@ -26,12 +26,11 @@ class Template {
         return $this->params[$name] ?? null;
     }
 
+    public function setTemplateFilePath(string $filepath): void {
+        $this->template_filepath = $filepath;
+    }
+
     public function render(): string {
-
-        if (!file_exists($this->template_filepath)) {
-            throw new \RuntimeException("Template file not found: " . $this->template_filepath);
-        }
-
         extract($this->params);
         ob_start();
         include $this->template_filepath;

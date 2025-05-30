@@ -50,9 +50,9 @@
     </div>
 
     <footer class="mt-auto flex-shrink-0">
-        <div class="container nav justify-content-center border-top pb-3 mb-3">
-            2025 Hell Session Store
-        </div>
+<!--        <div class="container nav justify-content-center border-top pb-3 mb-3">-->
+<!--            2025 Hell Session Store-->
+<!--        </div>-->
     </footer>
 
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>

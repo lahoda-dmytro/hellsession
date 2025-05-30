@@ -6,7 +6,7 @@ use classes\Core;
 class Model {
     protected array $fieldArray = [];
     protected string $table = '';
-    protected string $primaryKey  = 'id';
+    protected string $primaryKey = 'id';
     protected array $fillable = [];
 
 
@@ -15,21 +15,41 @@ class Model {
             $this->fieldArray[$key] = $value;
         }
     }
+
     public function __set(string $name, mixed $value): void {
         $this->fieldArray[$name] = $value;
     }
+
     public function __get(string $name): mixed {
         return $this->fieldArray[$name] ?? null;
     }
 
+    // всі поля моделі у вигляді масиву
     public function toArray(): array {
         return $this->fieldArray;
     }
 
-    public function save(): bool {
+
+    //видалення з бд за умовами, якщо передано лише айді, видалям за ключем
+    public static function delete(mixed $conditions): int {
+        $instance = new static();
 
         $db = Core::getInstance()->db;
-        $dataToSave = $this->filter($this->fieldArray);
+
+        if (is_array($conditions)) {
+            // видалення за масивом умов
+            return $db->delete($instance->table, $conditions);
+        } else {
+            // видалення за первинним ключем
+            return $db->delete($instance->table, [$instance->primaryKey => $conditions]);
+        }
+    }
+
+
+     public function save(): bool {
+
+        $db = Core::getInstance()->db;
+        $dataToSave = $this->filterFillable($this->fieldArray);
 
         $id = $this->{$this->primaryKey} ?? null;
 
@@ -46,7 +66,8 @@ class Model {
         }
     }
 
-    protected function filter(array $data): array {
+
+    protected function filterFillable(array $data): array {
         if (empty($this->fillable)) {
             return $data;
         }
@@ -60,7 +81,8 @@ class Model {
         return $filtered;
     }
 
-    public static function find(mixed $id): ?static {
+
+    public static function find(mixed $id): ?static { // Перейменовано з findById
         $instance = new static();
 
         $db = Core::getInstance()->db;
@@ -71,6 +93,20 @@ class Model {
         }
         return null;
     }
+
+
+    public static function findOneWhere(array $where): ?static {
+        $instance = new static();
+
+        $db = Core::getInstance()->db;
+        $results = $db->select($instance->table, '*', $where, '', 1);
+
+        if (!empty($results)) {
+            return new static($results[0]);
+        }
+        return null;
+    }
+
 
     public static function all(): array {
         $instance = new static();
