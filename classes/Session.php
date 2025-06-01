@@ -3,33 +3,26 @@
 namespace classes;
 
 class Session {
-    public function set($name, $value): void {
-        $_SESSION[$name] = $value;
+    public function set(string $key, $value): void {
+        $_SESSION[$key] = $value;
     }
 
-    public function get($name) {
-        return $_SESSION[$name] ?? null;
+    public function get(string $key) {
+        return $_SESSION[$key] ?? null;
     }
 
-    public function has($name): bool {
-        return isset($_SESSION[$name]);
-    }
-
-    public function remove($name): void {
-        unset($_SESSION[$name]);
+    public function remove(string $key): void {
+        if (isset($_SESSION[$key])) {
+            unset($_SESSION[$key]);
+        }
     }
 
     public function clear(): void {
         session_unset();
+        session_destroy();
     }
 
-    public function all(): array {
-        return $_SESSION;
-    }
-
-    public function setValues(array $assocArray): void {
-        foreach ($assocArray as $key => $value) {
-            $this->set($key, $value);
-        }
+    public function isLoggedIn(): bool {
+        return $this->get('user_id') !== null;
     }
 }

@@ -3,31 +3,46 @@
 namespace controllers;
 
 use classes\Controller;
+use classes\Core;
 use models\User;
 
 class UsersController extends Controller {
-    public function loginAction(): array
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'] ?? '';
-            $password = $_POST['password'] ?? '';
 
-            // User::where повертає масив моделей, тому беремо перший елемент або null
-            $users = User::where(['username' => $username]);
-            $user = $users[0] ?? null;
+    public function loginAction(): array {
+        $errors = [];
+        $username_input = '';
+
+        if ($this->isPost) {
+            $username_input = $this->post->username ?? '';
+            $password_input = $this->post->password ?? '';
 
 
-            //password_verify($password, $user->password
-            if ($user && $password === $user->password) {
-                // Записуємо user_id в сесію (припустимо, сесія доступна через Core)
-                \classes\Core::getInstance()->session->set('user_id', $user->id);
-
-                return $this->view('Логін успішний', ['user' => $user]);
+            if (empty($username_input) || empty($password_input)) {
+                $errors[] = 'Enter the username and password';
             } else {
-                return $this->view('Логін', ['error' => 'Неправильний логін або пароль']);
+                $userModel = new User();
+                if ($userModel->login($username_input, $password_input)) {
+                    header('Location: /?route=site/index');
+                    exit();
+                } else {
+                    $errors[] = 'Incorrect username or password.';
+                }
             }
         }
 
-        return $this->view('Логін');
+        $this->addData([
+            'Title' => 'Login',
+            'errors' => $errors,
+            'username' => $username_input,
+        ]);
+        return $this->view('Login', $this->data);
     }
+
+    public function logoutAction(): void {
+        User::logout();
+        header('Location: /?route=site/index');
+        exit();
+    }
+
+    // public function registerAction(): array { ... }
 }

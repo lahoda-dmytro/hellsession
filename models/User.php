@@ -3,6 +3,8 @@
 namespace models;
 
 use classes\Model;
+use classes\Core;
+use classes\Post;
 
 /**
  * @property int $id
@@ -24,4 +26,67 @@ use classes\Model;
 
 class User extends Model {
     protected string $table = 'users';
+
+
+    public function login(string $usernameOrEmail, string $password): bool {
+        $core = Core::getInstance();
+
+
+        $user = static::findOneWhere(['username' => $usernameOrEmail]);
+        if (!$user) {
+            $user = static::findOneWhere(['email' => $usernameOrEmail]);
+        }
+
+
+        if ($user && $user->password === $password) {
+
+            $this->loginUserIntoSession($user);
+
+
+
+            if ($user instanceof User) {
+                try {
+                    $user->last_login = date('Y-m-d H:i:s');
+                    $user->save();
+                } catch (\Throwable $e) {
+                    error_log("Error updating last_login for user " . $user->id . ": " . $e->getMessage());
+
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
+    protected function loginUserIntoSession(User $user): void {
+        $core = Core::getInstance();
+        $core->session->set('user_id', $user->id);
+        $core->session->set('username', $user->username);
+        $core->session->set('is_superuser', $user->is_superuser);
+    }
+
+
+    public static function isLoggedIn(): bool {
+        return Core::getInstance()->session->isLoggedIn();
+    }
+
+
+    public static function getCurrentUser(): ?User {
+        $userId = Core::getInstance()->session->get('user_id');
+        if ($userId) {
+            return static::find($userId);
+        }
+        return null;
+    }
+
+
+    public static function logout(): void {
+        $core = Core::getInstance();
+        $core->session->remove('user_id');
+        $core->session->remove('username');
+        $core->session->remove('is_superuser');
+        $core->session->clear();
+    }
 }
