@@ -30,30 +30,39 @@
             <div class="header-logo">
                 <a href="/"><img src="/static/img/qwewwq.png" alt="" class="heavy-logo"></a>
             </div>
-            <div class="header-profile">
-                <a href="#" class="header-list m-3">login</a>
-            </div>
+            <?php if(!\models\User::isLoggedIn()) :?>
+                <div class="header-profile">
+                    <a href="/?route=users/login" class="header-list m-3">login</a>
+                </div>
+            <?php endif;?>
+
+            <?php if(\models\User::isLoggedIn()) :?>
+                <div class="header-profile">
+                    <a href="/users/logout" class="header-list m-3">logout</a>
+                </div>
+            <?php endif;?>
         </div>
     </header>
 
-    <main class="flex-grow-1 d-flex align-items-center justify-content-center">
-        <div class="container">
-            <?=$Content ?>
-        </div>
-    </main>
-
-    <div>
-        <img src="/static/img/frame1.png" class="frame1" alt="">
-        <img src="/static/img/frame2.png" class="frame2" alt="">
-        <img src="/static/img/frame3.png" class="frame3" alt="">
-        <img src="/static/img/frame4.png" class="frame4" alt="">
+<!--    <main class="flex-grow-1 d-flex align-items-center justify-content-center">-->
+<!--        <div class="container">-->
+<!--            --><?php //=$Content ?>
+<!--        </div>-->
+<!--    </main>-->
+    <div class="container">
+        <?=$Content ?>
     </div>
 
-    <footer class="mt-auto flex-shrink-0">
+    <img src="/static/img/frame1.png" class="frame1" alt="">
+    <img src="/static/img/frame2.png" class="frame2" alt="">
+    <img src="/static/img/frame3.png" class="frame3" alt="">
+    <img src="/static/img/frame4.png" class="frame4" alt="">
+
+<!--    <footer class="mt-auto flex-shrink-0">-->
 <!--        <div class="container nav justify-content-center border-top pb-3 mb-3">-->
 <!--            2025 Hell Session Store-->
 <!--        </div>-->
-    </footer>
+<!--    </footer>-->
 
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

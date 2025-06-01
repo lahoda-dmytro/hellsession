@@ -12,6 +12,9 @@ class UsersController extends Controller {
         $errors = [];
         $username_input = '';
 
+        if(User::isLoggedIn())
+            header('Location: /?route=site/index');
+
         if ($this->isPost) {
             $username_input = $this->post->username ?? '';
             $password_input = $this->post->password ?? '';
