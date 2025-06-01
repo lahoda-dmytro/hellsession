@@ -9,12 +9,12 @@ class CategoryController extends Controller
 {
     public function indexAction(): array
     {
-        $allCategories = Category::all();
+        $categories = Category::all();
 
-        if (empty($allCategories)) {
+        if (empty($categories)) {
             $this->addData(['message' => 'category not found']);
         } else {
-            $this->addData(['categories' => $allCategories]);
+            $this->addData(['categories' => $categories]);
         }
 
         return $this->view('categories', $this->data);

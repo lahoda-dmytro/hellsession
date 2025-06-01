@@ -26,17 +26,23 @@ class Template {
         return $this->params[$name] ?? null;
     }
 
+    public function clearParams(): void {
+        $this->params = [];
+    }
+
     public function setTemplateFilePath(string $filepath): void {
         $this->template_filepath = $filepath;
     }
 
     public function render(): string {
+        if (!file_exists($this->template_filepath)) {
+            throw new \RuntimeException("Template file not found: {$this->template_filepath}");
+        }
+
         extract($this->params);
         ob_start();
         include $this->template_filepath;
-        $str = ob_get_contents();
-        ob_end_clean();
-        return $str;
+        return ob_get_clean();
     }
 
     public function display(): void {

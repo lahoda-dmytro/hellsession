@@ -9,7 +9,7 @@
 <?php if (isset($message)): ?>
     <p><?= htmlspecialchars($message) ?></p>
 <?php elseif (!empty($products)): ?>
-    <table border="1" cellpadding="5" cellspacing="0">
+    <table>
         <thead>
         <tr>
             <th>ID</th>
