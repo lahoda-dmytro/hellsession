@@ -11,7 +11,6 @@ class Core {
     protected Template $mainTemplate;
     public $session;
 
-
     private function __construct() {
 
         $config = Config::getInstance();

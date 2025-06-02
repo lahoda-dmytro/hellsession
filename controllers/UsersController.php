@@ -53,8 +53,6 @@ class UsersController extends Controller {
             exit();
         }
 
-
-
         $errors = [];
         $values = [
             'first_name' => '',
@@ -71,22 +69,25 @@ class UsersController extends Controller {
             $password1 = $this->post->password1 ?? '';
             $password2 = $this->post->password2 ?? '';
 
-            $values = compact('firstName', 'lastName', 'username', 'email');
+            $values = [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'username' => $username,
+                'email' => $email,
+            ];
 
-            // Перевірка обов'язкових полів
             if (empty($firstName) || empty($lastName) || empty($username) || empty($email) || empty($password1) || empty($password2)) {
                 $errors[] = 'All fields are required.';
             }
 
-            // Перевірка збігу паролів
             if ($password1 !== $password2) {
                 $errors[] = 'Passwords do not match.';
             }
 
-            // Перевірка унікальності користувача
             if (User::findOneWhere(['username' => $username])) {
                 $errors[] = 'Username already exists.';
             }
+
             if (User::findOneWhere(['email' => $email])) {
                 $errors[] = 'Email already exists.';
             }
@@ -95,8 +96,6 @@ class UsersController extends Controller {
                 $errors[] = 'Username or email already taken.';
             }
 
-
-            // Якщо немає помилок — створюємо користувача
             if (empty($errors)) {
                 $user = new User();
                 $user->first_name = $firstName;
@@ -119,11 +118,10 @@ class UsersController extends Controller {
 
         $this->addData([
             'errors' => $errors,
-            'username' => $values['username'],
+            'old' => $values
         ]);
 
         return $this->view('Register', $this->data);
     }
-
 
 }
