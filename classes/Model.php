@@ -1,7 +1,6 @@
 <?php
 
 namespace classes;
-use classes\Core;
 
 class Model {
     protected array $fieldArray = [];
@@ -24,7 +23,6 @@ class Model {
         return $this->fieldArray[$name] ?? null;
     }
 
-    // всі поля моделі у вигляді масиву
     public function toArray(): array {
         return $this->fieldArray;
     }
@@ -82,7 +80,7 @@ class Model {
     }
 
 
-    public static function find(mixed $id): ?static { // Перейменовано з findById
+    public static function find(mixed $id): ?static {
         $instance = new static();
 
         $db = Core::getInstance()->db;

@@ -84,30 +84,19 @@ class UsersController extends Controller {
                 $errors[] = 'Passwords do not match.';
             }
 
-            if (User::findOneWhere(['username' => $username])) {
-                $errors[] = 'Username already exists.';
-            }
-
-            if (User::findOneWhere(['email' => $email])) {
-                $errors[] = 'Email already exists.';
-            }
-
             if (User::isUsernameOrEmailTaken($username, $email)) {
                 $errors[] = 'Username or email already taken.';
             }
 
             if (empty($errors)) {
                 $user = new User();
-                $user->first_name = $firstName;
-                $user->last_name = $lastName;
-                $user->username = $username;
-                $user->email = $email;
-                $user->password = password_hash($password1, PASSWORD_BCRYPT);
-                $user->joined_date = date('Y-m-d H:i:s');
-                $user->status = 'active';
-
-                if ($user->save()) {
-                    $user->loginUserIntoSession($user);
+                if ($user->register([
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password1
+                ])) {
                     header('Location: /?route=site/index');
                     exit();
                 } else {
@@ -123,5 +112,4 @@ class UsersController extends Controller {
 
         return $this->view('Register', $this->data);
     }
-
 }

@@ -29,9 +29,6 @@ class User extends Model {
 
 
     public function login(string $usernameOrEmail, string $password): bool {
-        $core = Core::getInstance();
-
-
         $user = static::findOneWhere(['username' => $usernameOrEmail]);
         if (!$user) {
             $user = static::findOneWhere(['email' => $usernameOrEmail]);
@@ -88,6 +85,31 @@ class User extends Model {
     public static function isUsernameOrEmailTaken(string $username, string $email): bool {
         return static::findOneWhere(['username' => $username]) !== null
             || static::findOneWhere(['email' => $email]) !== null;
+    }
+
+    public function register(array $data): bool {
+        $this->first_name = $data['first_name'] ?? '';
+        $this->last_name = $data['last_name'] ?? '';
+        $this->username = $data['username'] ?? '';
+        $this->email = $data['email'] ?? '';
+        $this->password = password_hash($data['password'], PASSWORD_BCRYPT);
+        $this->joined_date = date('Y-m-d H:i:s');
+        $this->status = 'active';
+
+        if ($this->save()) {
+            $this->loginUserIntoSession($this);
+
+            try {
+                $this->last_login = date('Y-m-d H:i:s');
+                $this->save();
+            } catch (\Throwable $e) {
+                error_log("Error setting last_login after registration: " . $e->getMessage());
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
 }
