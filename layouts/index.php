@@ -30,17 +30,30 @@
             <div class="header-logo">
                 <a href="/"><img src="/static/img/qwewwq.png" alt="" class="heavy-logo"></a>
             </div>
-            <?php if(!\models\User::isLoggedIn()) :?>
-                <div class="header-profile">
-                    <a href="/?route=users/login" class="header-list m-3">login</a>
-                </div>
-            <?php endif;?>
+            <navbar class="header-nav pt-4">
 
-            <?php if(\models\User::isLoggedIn()) :?>
-                <div class="header-profile">
-                    <a href="/users/logout" class="header-list m-3">logout</a>
-                </div>
-            <?php endif;?>
+                <?php if(!\models\User::isLoggedIn()) :?>
+                <ul class="header-list d-flex">
+                    <li>
+                        <a href="/?route=users/login" class="header-list m-3">login</a>
+                    </li>
+                    <li>
+                        <a href="/?route=users/register" class="header-list m-3">register</a>
+                    </li>
+                </ul>
+                <?php endif;?>
+
+                <?php if(\models\User::isLoggedIn()) :?>
+                <ul class="header-list d-flex">
+                    <li>
+                        <a href="/users/logout" class="header-list m-3">logout</a>
+                    </li>
+                    <li>
+                        <a href="/users/profile" class="header-list m-3">profile</a>
+                    </li>
+                </ul>
+                <?php endif;?>
+            </navbar>
         </div>
     </header>
 

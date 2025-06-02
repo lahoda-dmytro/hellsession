@@ -38,11 +38,8 @@ class User extends Model {
         }
 
 
-        if ($user && $user->password === $password) {
-
+        if ($user && password_verify($password, $user->password)) {
             $this->loginUserIntoSession($user);
-
-
 
             if ($user instanceof User) {
                 try {
@@ -50,7 +47,6 @@ class User extends Model {
                     $user->save();
                 } catch (\Throwable $e) {
                     error_log("Error updating last_login for user " . $user->id . ": " . $e->getMessage());
-
                 }
             }
             return true;
@@ -60,7 +56,7 @@ class User extends Model {
     }
 
 
-    protected function loginUserIntoSession(User $user): void {
+    public function loginUserIntoSession(User $user): void {
         $core = Core::getInstance();
         $core->session->set('user_id', $user->id);
         $core->session->set('username', $user->username);
@@ -89,4 +85,9 @@ class User extends Model {
         $core->session->remove('is_superuser');
         $core->session->clear();
     }
+    public static function isUsernameOrEmailTaken(string $username, string $email): bool {
+        return static::findOneWhere(['username' => $username]) !== null
+            || static::findOneWhere(['email' => $email]) !== null;
+    }
+
 }
