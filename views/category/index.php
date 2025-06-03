@@ -1,19 +1,24 @@
 <?php
 /**
- * @var array $categories
- * @var string $message
+ * @var array $this->data['categories'] Масив категорій
+ * @var string $this->data['Title'] Заголовок сторінки
+ * @var bool $this->data['isAdmin'] Чи є користувач адміном
  */
+$categories = $this->data['categories'] ?? [];
+$Title = $this->data['Title'] ?? 'Категорії';
+$isAdmin = $this->data['isAdmin'] ?? false;
 ?>
-    <h1>category list</h1>
 
-<?php if (isset($message)): ?>
-    <p><?= htmlspecialchars($message) ?></p>
-<?php elseif (!empty($categories)): ?>
-    <ul>
-        <?php foreach ($categories as $category): ?>
-            <li>ID: <?= htmlspecialchars($category->id) ?>, name: <?= htmlspecialchars($category->name) ?> (Slug: <?= htmlspecialchars($category->slug) ?>)</li>
-        <?php endforeach; ?>
-    </ul>
+    <h1><?= htmlspecialchars($Title) ?></h1>
+
+<?php if (empty($categories)): ?>
+    <p>Немає категорій для відображення.</p>
 <?php else: ?>
-    <p>haven`t category at that moment</p>
+    <table>
+        <?php foreach ($categories as $category): ?>
+            <tr>
+                <td><?= htmlspecialchars($category->name) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
 <?php endif; ?>

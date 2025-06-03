@@ -9,7 +9,7 @@ class Core {
     public Database $db;
     private static ?Core $instance = null;
     protected Template $mainTemplate;
-    public $session;
+    public Session $session;
 
     private function __construct() {
 

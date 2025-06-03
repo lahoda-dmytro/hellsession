@@ -19,10 +19,4 @@ class ProductsController extends Controller
 
         return $this->view('products', $this->data);
     }
-
-    public function by_categoryAction(int $categoryId): array {
-        $products = Product::where(['category_id' => $categoryId]);
-        return $this->view("Товари категорії #$categoryId", ['products' => $products]);
-    }
-
 }

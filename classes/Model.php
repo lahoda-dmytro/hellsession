@@ -108,7 +108,6 @@ class Model {
 
     public static function all(): array {
         $instance = new static();
-
         $db = Core::getInstance()->db;
         $results = $db->select($instance->table);
 

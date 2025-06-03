@@ -17,8 +17,9 @@ class Database {
                 PDO::ATTR_EMULATE_PREPARES   => false,
             ];
             $this->pdo = new PDO($dsn, $user, $pass, $options);
+            error_log("DB_CONNECTION_INFO: Connected to DSN: {$dsn}, User: {$user}. Connection established successfully.");
         } catch (PDOException $e) {
-            error_log("Database connection failed: " . $e->getMessage() . " - DSN: " . $dsn . " - User: " . $user);
+            error_log("DATABASE_CONNECTION_ERROR: Database connection failed: " . $e->getMessage() . " - DSN: " . $dsn . " - User: " . $user);
             throw new \RuntimeException("Database connection error. Please try again later.");
         }
     }
@@ -53,10 +54,16 @@ class Database {
         if (!empty($whereClause)) {
             $sql .= " WHERE " . $whereClause;
         }
+        try {
+            $sth = $this->pdo->prepare($sql);
+            $sth->execute($params);
+            $results = $sth->fetchAll();
 
-        $sth = $this->pdo->prepare($sql);
-        $sth->execute($params);
-        return $sth->fetchAll();
+            return $results;
+        } catch (PDOException $e) {
+            error_log("DB_SELECT_ERROR: Database SELECT error for table '{$table}': " . $e->getMessage() . " - SQL: " . $sql);
+            throw $e;
+        }
     }
 
     public function insert(string $table, array $row_to_insert): int {

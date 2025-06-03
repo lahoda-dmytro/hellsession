@@ -7,15 +7,6 @@
 <section class="login-reg d-flex">
     <div class="login-title">
         <h2>Registration</h2>
-        <?php if (isset($errors) && !empty($errors)):?>
-            <div class="alert alert-danger" style="color: red;">
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
         <form method="POST" action="/?route=users/register">
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -54,9 +45,17 @@
                            value=""
                            name="password2" placeholder="Your Password" required>
                 </div>
+                <button type="submit" class="login-btn form-style">Register</button>
             </div>
-            <button type="submit" class="login-btn form-style">Register</button>
-
+            <?php if (isset($errors) && !empty($errors)):?>
+                <div class="alert" style="color: red;">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?= htmlspecialchars($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </form>
     </div>
 </section>

@@ -9,6 +9,8 @@
 
 static/
 public/
+uploads/
+
 # AWS User-specific
 .idea/**/aws.xml
 
