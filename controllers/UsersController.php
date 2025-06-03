@@ -40,13 +40,11 @@ class UsersController extends Controller {
         ]);
         return $this->view('Login', $this->data);
     }
-
     public function logoutAction(): void {
         User::logout();
         header('Location: /?route=site/index');
         exit();
     }
-
     public function registerAction(): array {
         if (User::isLoggedIn()) {
             header('Location: /?route=site/index');

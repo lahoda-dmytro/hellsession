@@ -1,24 +1,46 @@
-<?php
-/**
- * @var array $this->data['categories'] Масив категорій
- * @var string $this->data['Title'] Заголовок сторінки
- * @var bool $this->data['isAdmin'] Чи є користувач адміном
- */
-$categories = $this->data['categories'] ?? [];
-$Title = $this->data['Title'] ?? 'Категорії';
-$isAdmin = $this->data['isAdmin'] ?? false;
-?>
+<h1><?= htmlspecialchars($Title ?? 'Категорії') ?></h1>
 
-    <h1><?= htmlspecialchars($Title) ?></h1>
-
-<?php if (empty($categories)): ?>
-    <p>Немає категорій для відображення.</p>
-<?php else: ?>
+<?php if (!empty($categories)): ?>
     <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Назва</th>
+            <th>Опис</th>
+            <th>Slug</th>
+            <th>Дата створення</th>
+            <th>Дата оновлення</th>
+            <?php if (!empty($isAdmin)): ?>
+                <th>Дії</th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
         <?php foreach ($categories as $category): ?>
             <tr>
-                <td><?= htmlspecialchars($category->name) ?></td>
+                <td><?= $category->id ?></td>
+                <td><?= htmlspecialchars($category->name ?? '') ?></td>
+                <td><?= htmlspecialchars($category->description ?? '') ?></td>
+                <td><?= htmlspecialchars($category->slug ?? '') ?></td>
+                <td><?= $category->created_at ?></td>
+                <td><?= $category->updated_at ?></td>
+                <?php if (!empty($isAdmin)): ?>
+                    <td>
+                        <a href="/?route=category/edit&id=<?= $category->id ?>">Редагувати</a> |
+                        <a href="/?route=category/delete&id=<?= $category->id ?>">Видалити</a>
+                    </td>
+                <?php endif; ?>
             </tr>
+
         <?php endforeach; ?>
+        </tbody>
     </table>
+<?php else: ?>
+    <p>Категорій не знайдено.</p>
+<?php endif; ?>
+
+<?php if (!empty($isAdmin)): ?>
+    <p>
+        <a href="/?route=category/add">+ Додати категорію</a>
+    </p>
 <?php endif; ?>

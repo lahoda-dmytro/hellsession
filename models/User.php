@@ -26,8 +26,6 @@ use classes\Post;
 
 class User extends Model {
     protected string $table = 'users';
-
-
     public function login(string $usernameOrEmail, string $password): bool {
         $user = static::findOneWhere(['username' => $usernameOrEmail]);
         if (!$user) {
@@ -51,21 +49,15 @@ class User extends Model {
 
         return false;
     }
-
-
     public function loginUserIntoSession(User $user): void {
         $core = Core::getInstance();
         $core->session->set('user_id', $user->id);
         $core->session->set('username', $user->username);
         $core->session->set('is_superuser', $user->is_superuser);
     }
-
-
     public static function isLoggedIn(): bool {
         return Core::getInstance()->session->isLoggedIn();
     }
-
-
     public static function getCurrentUser(): ?User {
         $userId = Core::getInstance()->session->get('user_id');
         if ($userId) {
@@ -73,8 +65,6 @@ class User extends Model {
         }
         return null;
     }
-
-
     public static function logout(): void {
         $core = Core::getInstance();
         $core->session->remove('user_id');
@@ -86,7 +76,6 @@ class User extends Model {
         return static::findOneWhere(['username' => $username]) !== null
             || static::findOneWhere(['email' => $email]) !== null;
     }
-
     public function register(array $data): bool {
         $this->first_name = $data['first_name'] ?? '';
         $this->last_name = $data['last_name'] ?? '';
@@ -108,8 +97,6 @@ class User extends Model {
 
             return true;
         }
-
         return false;
     }
-
 }
