@@ -4,7 +4,7 @@
  * @var string $username
  */
 ?>
-<section class="login-reg d-flex">
+<section class="login-reg d-flex d-block mx-auto w-50">
     <div class="login-title">
         <h2>Registration</h2>
         <form method="POST" action="/?route=users/register">
@@ -45,10 +45,11 @@
                            value=""
                            name="password2" placeholder="Your Password" required>
                 </div>
-                <button type="submit" class="login-btn form-style">Register</button>
             </div>
+            <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Register</button>
+
             <?php if (isset($errors) && !empty($errors)):?>
-                <div class="alert" style="color: red;">
+                <div class="alert">
                     <ul>
                         <?php foreach ($errors as $error): ?>
                             <li><?= htmlspecialchars($error) ?></li>

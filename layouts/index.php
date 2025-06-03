@@ -20,20 +20,26 @@
             <navbar class="header-nav pt-4">
                 <ul class="header-list d-flex">
                     <li>
+<!--                        main page-->
                         <a href="/" class="nav-a m-3">home</a>
                     </li>
                     <li>
+<!--                        products(index) list + category-->
                         <a href="#" class="nav-a m-3">shop</a>
                     </li>
                 </ul>
             </navbar>
             <div class="header-logo">
-                <a href="/"><img src="/static/img/qwewwq.png" alt="" class="heavy-logo"></a>
+                <a href="/"><img src="/static/img/qwewwq.png" alt="logo" class="heavy-logo"></a>
             </div>
             <navbar class="header-nav pt-4">
 
                 <?php if(!\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
+                    <li>
+                        <a href="#"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
+                        <p class="cart-quantity">3</p>
+                    </li>
                     <li>
                         <a href="/?route=users/login" class="header-list m-3">login</a>
                     </li>
@@ -46,13 +52,18 @@
                 <?php if(\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
                     <li>
-                        <a href="/users/logout" class="header-list m-3">logout</a>
+                        <a href="#"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
+                        <p class="cart-quantity">3</p>
                     </li>
                     <li>
                         <a href="/users/profile" class="header-list m-3">profile</a>
                     </li>
+                    <li>
+                        <a href="/users/logout" class="header-list m-3">logout</a>
+                    </li>
                 </ul>
                 <?php endif;?>
+
             </navbar>
         </div>
     </header>

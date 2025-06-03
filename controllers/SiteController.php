@@ -14,7 +14,7 @@ class SiteController extends Controller {
         $this->addData(['title' => 'hell session']);
 
 
-        return $this->view('Main page', $this->data);
+        return $this->view('Home', $this->data);
     }
 
 }
