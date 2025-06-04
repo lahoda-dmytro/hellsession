@@ -27,7 +27,6 @@ class Model {
         return $this->fieldArray;
     }
 
-
     //видалення з бд за умовами, якщо передано лише айді, видалям за ключем
     public static function delete(mixed $conditions): int {
         $instance = new static();
@@ -42,7 +41,6 @@ class Model {
             return $db->delete($instance->table, [$instance->primaryKey => $conditions]);
         }
     }
-
 
      public function save(): bool {
 
@@ -64,7 +62,6 @@ class Model {
         }
     }
 
-
     protected function filterFillable(array $data): array {
         if (empty($this->fillable)) {
             return $data;
@@ -79,7 +76,6 @@ class Model {
         return $filtered;
     }
 
-
     public static function find(mixed $id): ?static {
         $instance = new static();
 
@@ -92,7 +88,6 @@ class Model {
         return null;
     }
 
-
     public static function findOneWhere(array $where): ?static {
         $instance = new static();
 
@@ -104,7 +99,6 @@ class Model {
         }
         return null;
     }
-
 
     public static function all(): array {
         $instance = new static();
