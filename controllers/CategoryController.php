@@ -133,7 +133,6 @@ class CategoryController extends Controller
         } else {
             Core::getInstance()->error(500);
         }
-        exit();
     }
 
 }

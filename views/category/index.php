@@ -26,8 +26,8 @@
                 <td><?= $category->updated_at ?></td>
                 <?php if (!empty($isAdmin)): ?>
                     <td>
-                        <a href="/?route=category/edit&id=<?= $category->id ?>">Редагувати</a> |
-                        <a href="/?route=category/delete&id=<?= $category->id ?>">Видалити</a>
+                        <a href="/?route=category/edit/<?= $category->id ?>">Редагувати</a> |
+                        <a href="/?route=category/delete/<?= $category->id ?>">Видалити</a>
                     </td>
                 <?php endif; ?>
             </tr>
