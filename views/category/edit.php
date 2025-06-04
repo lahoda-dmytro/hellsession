@@ -7,7 +7,6 @@
  */
 ?>
 
-<h1><?= htmlspecialchars($title ?? 'Редагувати категорію') ?></h1>
 
 <?php if (!empty($errors)): ?>
     <div class="error">
@@ -19,12 +18,19 @@
     </div>
 <?php endif; ?>
 
-<form method="post" action="/?route=category/edit/<?= $category->id ?>">
-    <label for="name">Назва:</label><br>
-    <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name'] ?? $category->name) ?>" required><br><br>
+<section class="login-reg d-flex d-block mx-auto w-50">
+    <div class="login-title">
+        <h2><?= htmlspecialchars($title ?? 'Редагувати категорію') ?></h2>
+        <form method="post" action="/?route=category/edit/<?= $category->id ?>">
+            <label for="name" class="form-label form-stylereg">Назва:</label><br>
+            <input type="text" id="name" name="name" class="form-control form-stylereg w-20" id="id_first_name"
+                   value="<?= htmlspecialchars($old['name'] ?? $category->name) ?>" required><br><br>
 
-    <label for="description">Опис:</label><br>
-    <textarea id="description" name="description"><?= htmlspecialchars($old['description'] ?? $category->description) ?></textarea>
+            <label for="description" class="form-label form-stylereg">Опис:</label><br>
+            <textarea id="description" class="form-control form-stylereg w-100"
+                      name="description"><?= htmlspecialchars($old['description'] ?? $category->description) ?></textarea>
 
-    <button type="submit">Оновити категорію</button>
-</form>
+            <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Оновити категорію</button>
+        </form>
+    </div>
+</section>
