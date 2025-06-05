@@ -1,5 +1,5 @@
 <?php
 
-$Config[] = [
+return [
     'title' =>  'jewelry & accessories',
 ];

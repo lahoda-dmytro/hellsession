@@ -8,6 +8,10 @@ $category = $category ?? null;
 $products = $products ?? [];
 $currentPage = $currentPage ?? 1;
 $totalPages = $totalPages ?? 1;
+
+foreach ($products as $product) {
+    error_log("Product ID: " . $product->id . ", Main Image: " . ($product->main_image ?? 'null'));
+}
 ?>
 
 <div class="llist d-flex">
@@ -34,9 +38,11 @@ $totalPages = $totalPages ?? 1;
             <div class="items">
                 <?php foreach ($products as $product): ?>
                     <div class="item">
-                        <a href="/?route=site/product/<?php echo $product->slug; ?>" class="home-card d-flex flex-column align-items-center text-center">
-                            <?php if ($product->main_image): ?>
-                                <img src="/uploads/<?php echo htmlspecialchars($product->main_image); ?>" class="card-img" alt="<?php echo htmlspecialchars($product->name); ?>">
+                        <a href="/?route=site/product_detail/<?php echo $product->id; ?>" class="home-card d-flex flex-column align-items-center text-center">
+                            <?php
+
+                            if ($product->main_image): ?>
+                                <img src="<?php echo htmlspecialchars($product->main_image); ?>" class="card-img" alt="<?php echo htmlspecialchars($product->name); ?>">
                             <?php else: ?>
                                 <img src="/static/img/noimage.jpg" class="card-img" alt="No image available">
                             <?php endif; ?>

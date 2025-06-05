@@ -16,17 +16,12 @@ class SiteController extends Controller {
 
         return $this->view('Home', $this->data);
     }
-
     public function productsAction(): array {
         $categorySlug = $_GET['category'] ?? null;
         $page = max(1, intval($_GET['page'] ?? 1));
         $perPage = 12;
 
-        error_log("=== Products Page Debug ===");
-        error_log("Request params: " . print_r($_GET, true));
-
         $categories = \models\Category::getCategories();
-        error_log("Categories query result: " . print_r($categories, true));
 
         $category = null;
         if ($categorySlug) {
@@ -37,22 +32,17 @@ class SiteController extends Controller {
                 }
             }
         }
-        error_log("Selected category: " . ($category ? print_r($category->toArray(), true) : 'null'));
 
         $products = \models\Product::getProductsWithPagination(
             $page, 
             $perPage, 
             $category ? $category->id : null
         );
-        error_log("Products query result: " . print_r($products, true));
-        
+
         $totalProducts = \models\Product::getTotalProducts($category ? $category->id : null);
         $totalPages = ceil($totalProducts / $perPage);
 
-        error_log("Total Products: " . $totalProducts);
-        error_log("Total Pages: " . $totalPages);
-
-        $this->addData([
+        return $this->view('Products', [
             'title' => $category ? $category->name : 'All Products',
             'categories' => $categories,
             'category' => $category,
@@ -60,8 +50,26 @@ class SiteController extends Controller {
             'currentPage' => $page,
             'totalPages' => $totalPages
         ]);
-
-        return $this->view('Products', $this->data);
     }
+    public function product_detailAction(int $id): array {
+        $product = \models\Product::getById($id);
 
+        if (!$product) {
+            Core::getInstance()->error(404);
+            exit();
+        }
+
+        $category = \models\Category::find($product->category_id);
+        
+        $images = \models\ProductImage::where(['product_id' => $product->id]);
+
+        $this->addData([
+            'Title' => $product->name,
+            'product' => $product,
+            'category' => $category,
+            'images' => $images
+        ]);
+
+        return $this->view('Product Detail', []);
+    }
 }

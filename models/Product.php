@@ -24,10 +24,8 @@ class Product extends Model {
         'category_id', 'name', 'slug', 'description', 'short_description',
         'price', 'discount_percentage', 'available', 'main_image', 'created_at', 'updated_at'
     ];
-
     public function __construct(array $data = []) {
         parent::__construct($data);
-        // Перетворюємо decimal поля в числа
         if (isset($this->fieldArray['price'])) {
             $this->fieldArray['price'] = (float)$this->fieldArray['price'];
         }
@@ -35,7 +33,6 @@ class Product extends Model {
             $this->fieldArray['discount_percentage'] = (float)$this->fieldArray['discount_percentage'];
         }
     }
-
     public static function addProduct(array $data): ?Product {
         $product = new self($data);
         return $product->save() ? $product : null;
@@ -63,7 +60,6 @@ class Product extends Model {
     {
         return self::find($id);
     }
-
     public static function getProductsWithPagination(int $page = 1, int $perPage = 12, ?int $categoryId = null): array {
         $offset = ($page - 1) * $perPage;
         
@@ -88,7 +84,6 @@ class Product extends Model {
         
         return $products;
     }
-
     public static function getTotalProducts(?int $categoryId = null): int {
         $query = "SELECT COUNT(*) as total FROM products WHERE available = 1";
         $params = [];
@@ -100,5 +95,15 @@ class Product extends Model {
         
         $result = self::query($query, $params);
         return (int)($result[0]['total'] ?? 0);
+    }
+    public static function getBySlug(string $slug): ?Product {
+        $query = "SELECT * FROM products WHERE slug = ? AND available = 1 LIMIT 1";
+        $results = self::query($query, [$slug]);
+        
+        if (!empty($results)) {
+            return new self($results[0]);
+        }
+        
+        return null;
     }
 }

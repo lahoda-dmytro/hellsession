@@ -117,7 +117,9 @@ class Database {
 
         $sth = $this->pdo->prepare($sql);
         $sth->execute($params);
-        return $sth->rowCount();
+
+        $affectedRows = $sth->rowCount();
+        return $affectedRows;
     }
 
     public function query(string $sql, array $params = []): array {
