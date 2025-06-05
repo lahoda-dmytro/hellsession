@@ -9,10 +9,13 @@ class SiteController extends Controller {
     public function indexAction(): array {
         //var_dump($_SESSION);
 
+        $discountedProducts = \models\Product::getDiscountedProducts();
 
-        $this->addData(['message' => 'welcome to main page']);
-        $this->addData(['title' => 'hell session']);
-
+        $this->addData([
+            'message' => 'welcome to main page',
+            'title' => 'hell session',
+            'discountedProducts' => $discountedProducts
+        ]);
 
         return $this->view('Home', $this->data);
     }
@@ -63,11 +66,14 @@ class SiteController extends Controller {
         
         $images = \models\ProductImage::where(['product_id' => $product->id]);
 
+        $mainImage = $product->main_image;
+
         $this->addData([
             'Title' => $product->name,
             'product' => $product,
             'category' => $category,
-            'images' => $images
+            'images' => $images,
+            'mainImage' => $mainImage
         ]);
 
         return $this->view('Product Detail', []);

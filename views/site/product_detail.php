@@ -1,5 +1,4 @@
 <?php
-/**
  * @var \models\Product $product
  * @var \models\Category $category
  * @var \models\ProductImage[] $images
@@ -9,6 +8,8 @@
     <div class="detail-img">
         <?php if ($product->main_image): ?>
             <img class="detail-image" src="<?= htmlspecialchars($product->main_image) ?>" alt="<?= htmlspecialchars($product->name) ?>" style="display: block;" data-index="0">
+        <?php else: ?>
+            <img class="detail-image" src="/static/img/noimage.jpg" alt="No image available" style="display: block;" data-index="0">
         <?php endif; ?>
         
         <?php foreach ($images as $index => $image): ?>
@@ -36,8 +37,9 @@
         <?php endif; ?>
         
         <form action="/?route=cart/add/<?= $product->id ?>" class="qform" method="post">
-            <div class="cart-form">
-                <input type="number" name="quantity" value="1" min="1" max="<?= $product->available ?>" class="form-control">
+            <div class="cart-form" style="display: flex; align-items: center; gap: 10px;">
+                <label for="quantity">Кількість:</label> 
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?= $product->available ?>" class="form-control" style="width: auto; border: none;">
                 <?php if (isset($_SESSION['csrf_token'])): ?>
                     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <?php endif; ?>
@@ -69,4 +71,4 @@
             images[currentIndex].style.display = 'block';
         });
     }
-</script> 
+</script>

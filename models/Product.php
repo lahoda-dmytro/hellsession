@@ -106,4 +106,32 @@ class Product extends Model {
         
         return null;
     }
+    public static function getDiscountedProducts(int $limit = 4): array {
+        $query = "SELECT * FROM products WHERE discount_percentage > 0 AND available = 1 ORDER BY discount_percentage DESC LIMIT ?";
+        $results = self::query($query, [$limit]);
+        
+        $products = [];
+        foreach ($results as $data) {
+            $products[] = new self($data);
+        }
+
+        if (count($products) < $limit) {
+            $needed = $limit - count($products);
+            $existingIds = array_map(function($product) {
+                return $product->id;
+            }, $products);
+
+            $placeholders = str_repeat('?,', count($existingIds) - 1) . '?';
+            $query = "SELECT * FROM products WHERE available = 1 AND id NOT IN ($placeholders) ORDER BY RAND() LIMIT ?";
+            $params = array_merge($existingIds, [$needed]);
+            
+            $randomResults = self::query($query, $params);
+            
+            foreach ($randomResults as $data) {
+                $products[] = new self($data);
+            }
+        }
+        
+        return $products;
+    }
 }
