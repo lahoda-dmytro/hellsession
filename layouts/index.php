@@ -30,7 +30,7 @@ error_reporting(E_ALL);
                     </li>
                     <li>
 <!--                        products(index) list + category-->
-                        <a href="#" class="nav-a m-3">shop</a>
+                        <a href="/?route=site/products" class="nav-a m-3">shop</a>
                     </li>
                 </ul>
             </navbar>

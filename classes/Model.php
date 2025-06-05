@@ -125,4 +125,8 @@ class Model {
         return $models;
     }
 
+    public static function query(string $query, array $params = []): array {
+        $db = Core::getInstance()->db;
+        return $db->query($query, $params);
+    }
 }

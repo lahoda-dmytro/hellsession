@@ -4,8 +4,6 @@
  * @var string $title
  * @var array $latestProducts
  */
-
-
 ?>
 
 <section class="home d-flex flex-column">

@@ -119,4 +119,15 @@ class Database {
         $sth->execute($params);
         return $sth->rowCount();
     }
+
+    public function query(string $sql, array $params = []): array {
+        try {
+            $sth = $this->pdo->prepare($sql);
+            $sth->execute($params);
+            return $sth->fetchAll();
+        } catch (PDOException $e) {
+            error_log("DB_QUERY_ERROR: Database query error: " . $e->getMessage() . " - SQL: " . $sql);
+            throw $e;
+        }
+    }
 }
