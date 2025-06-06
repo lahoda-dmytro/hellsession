@@ -144,4 +144,29 @@ class Product extends Model {
         
         return $products;
     }
+    public function getImages(): array {
+        return ProductImage::getImagesByProductId($this->id);
+    }
+    public function deleteImages(): bool {
+        $images = $this->getImages();
+        foreach ($images as $image) {
+            $filePath = $_SERVER['DOCUMENT_ROOT'] . $image->image_path;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            ProductImage::deleteImage($image->id);
+        }
+        return true;
+    }
+    public function deleteMainImage(): bool {
+        if ($this->main_image) {
+            $filePath = $_SERVER['DOCUMENT_ROOT'] . $this->main_image;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            $this->main_image = null;
+            return $this->save();
+        }
+        return false;
+    }
 }

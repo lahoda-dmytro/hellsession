@@ -19,6 +19,67 @@ class ProductController extends Controller
         }
     }
 
+    private function handleImageUpload(array $files, string $productName, bool $isMain = false): ?string {
+        if (!isset($files['tmp_name']) || !is_uploaded_file($files['tmp_name'])) {
+            return null;
+        }
+
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($files['tmp_name']);
+
+        if (!in_array($fileType, $allowedTypes)) {
+            return null;
+        }
+
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/products/' . $productName . '/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $extension = pathinfo($files['name'], PATHINFO_EXTENSION);
+        $fileName = uniqid() . '.' . $extension;
+        $filePath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($files['tmp_name'], $filePath)) {
+            return '/uploads/products/' . $productName . '/' . $fileName;
+        }
+
+        return null;
+    }
+
+    private function handleMultipleImageUpload(array $files, int $productId, string $productName): void {
+        if (!isset($files['tmp_name']) || !is_array($files['tmp_name'])) {
+            return;
+        }
+
+        $sortOrder = 10;
+        foreach ($files['tmp_name'] as $key => $tmpName) {
+            if (!is_uploaded_file($tmpName)) {
+                continue;
+            }
+
+            $file = [
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
+                'tmp_name' => $tmpName,
+                'error' => $files['error'][$key],
+                'size' => $files['size'][$key]
+            ];
+
+            $imagePath = $this->handleImageUpload($file, $productName);
+            if ($imagePath) {
+                ProductImage::addImage([
+                    'product_id' => $productId,
+                    'image_path' => $imagePath,
+                    'sort_order' => $sortOrder,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                $sortOrder += 10;
+            }
+        }
+    }
+
     public function indexAction(): array {
         $products = Product::getAll();
         $categories = Category::getCategories();
@@ -68,8 +129,16 @@ class ProductController extends Controller
                 'price' => (float) ($this->post->price ?? 0),
                 'discount_percentage' => (float) ($this->post->discount_percentage ?? 0),
                 'available' => (int) ($this->post->available ?? 1),
-                'main_image' => $this->post->main_image ?? '',
+                'main_image' => '',
             ];
+
+            if (isset($_FILES['main_image'])) {
+                $mainImagePath = $this->handleImageUpload($_FILES['main_image'], $slug, true);
+                if ($mainImagePath) {
+                    $data['main_image'] = $mainImagePath;
+                }
+            }
+
             $values = $data;
 
             if (empty($name)) {
@@ -79,6 +148,9 @@ class ProductController extends Controller
             if (empty($errors)) {
                 $product = Product::addProduct($data);
                 if ($product) {
+                    if (isset($_FILES['images'])) {
+                        $this->handleMultipleImageUpload($_FILES['images'], $product->id, $slug);
+                    }
                     header('Location: /?route=product/index');
                     exit();
                 } else {
@@ -109,6 +181,7 @@ class ProductController extends Controller
         $errors = [];
         $categories = Category::getCategories();
         $category = Category::find($product->category_id);
+        $images = $product->getImages();
 
         $values = [
             'category_id' => $product->category_id,
@@ -136,9 +209,13 @@ class ProductController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ];
 
-            error_log('POST data: ' . print_r($_POST, true));
-            error_log('Available checkbox: ' . (isset($this->post->available) ? 'set' : 'not set'));
-            error_log('Data to update: ' . print_r($data, true));
+            if (isset($_FILES['main_image']) && is_uploaded_file($_FILES['main_image']['tmp_name'])) {
+                $product->deleteMainImage();
+                $mainImagePath = $this->handleImageUpload($_FILES['main_image'], $slug, true);
+                if ($mainImagePath) {
+                    $data['main_image'] = $mainImagePath;
+                }
+            }
 
             $values = $data;
 
@@ -148,6 +225,9 @@ class ProductController extends Controller
 
             if (empty($errors)) {
                 if (Product::updateProduct($product->id, $data)) {
+                    if (isset($_FILES['images'])) {
+                        $this->handleMultipleImageUpload($_FILES['images'], $product->id, $slug);
+                    }
                     header('Location: /?route=product/index');
                     exit();
                 } else {
@@ -163,6 +243,7 @@ class ProductController extends Controller
             'errors' => $errors,
             'categories' => $categories,
             'category' => $category,
+            'images' => $images
         ]);
 
         return $this->view('product/edit', $this->data);
@@ -202,5 +283,26 @@ class ProductController extends Controller
             'images' => $images,
             'isAdmin' => User::getCurrentUser()?->is_superuser ?? false
         ]);
+    }
+
+    public function deleteImageAction(int $id): void {
+        $this->checkAdminAccess();
+
+        $image = ProductImage::find($id);
+        if (!$image) {
+            Core::getInstance()->error(404);
+            exit();
+        }
+
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . $image->image_path;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        if (ProductImage::deleteImage($id)) {
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        } else {
+            Core::getInstance()->error(500);
+        }
     }
 }
