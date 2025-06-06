@@ -59,7 +59,7 @@
 
     <div>
         <label for="available">Наявність:</label>
-        <input id="available" type="checkbox" name="available" value="1" <?= (!isset($old['available']) || $old['available']) ? 'checked' : '' ?>>
+        <input id="available" type="checkbox" name="available" value="1" <?= (!isset($old['available']) || $old['available'] == 1) ? 'checked' : '' ?>>
     </div>
 
     <div>

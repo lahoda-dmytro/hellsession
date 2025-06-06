@@ -119,6 +119,7 @@ class Database {
         $sth->execute($params);
 
         $affectedRows = $sth->rowCount();
+        error_log('Affected rows: ' . $affectedRows);
         return $affectedRows;
     }
 

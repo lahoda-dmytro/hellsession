@@ -22,7 +22,7 @@ class Product extends Model {
     protected string $table = 'products';
     protected array $fillable = [
         'category_id', 'name', 'slug', 'description', 'short_description',
-        'price', 'discount_percentage', 'available', 'main_image', 'created_at', 'updated_at'
+        'price', 'discount_percentage', 'available', 'main_image', 'updated_at'
     ];
     public function __construct(array $data = []) {
         parent::__construct($data);
@@ -97,8 +97,18 @@ class Product extends Model {
         return (int)($result[0]['total'] ?? 0);
     }
     public static function getBySlug(string $slug): ?Product {
-        $query = "SELECT * FROM products WHERE slug = ? AND available = 1 LIMIT 1";
-        $results = self::query($query, [$slug]);
+        $user = \models\User::getCurrentUser();
+        $isAdmin = $user && $user->is_superuser;
+        
+        $query = "SELECT * FROM products WHERE slug = ?";
+        $params = [$slug];
+        
+        if (!$isAdmin) {
+            $query .= " AND available = 1";
+        }
+        
+        $query .= " LIMIT 1";
+        $results = self::query($query, $params);
         
         if (!empty($results)) {
             return new self($results[0]);

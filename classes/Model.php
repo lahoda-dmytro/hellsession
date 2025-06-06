@@ -43,14 +43,18 @@ class Model {
     }
 
      public function save(): bool {
-
         $db = Core::getInstance()->db;
         $dataToSave = $this->filterFillable($this->fieldArray);
+
+        error_log('Data to save: ' . print_r($dataToSave, true));
+        error_log('Fillable fields: ' . print_r($this->fillable, true));
+        error_log('Original field array: ' . print_r($this->fieldArray, true));
 
         $id = $this->{$this->primaryKey} ?? null;
 
         if ($id) {
             $rowsAffected = $db->update($this->table, $dataToSave, [$this->primaryKey => $id]);
+            error_log('Update result - rows affected: ' . $rowsAffected);
             return $rowsAffected > 0;
         } else {
             $lastInsertId = $db->insert($this->table, $dataToSave);

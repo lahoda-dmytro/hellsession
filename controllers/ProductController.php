@@ -124,18 +124,21 @@ class ProductController extends Controller
 
         if ($this->isPost) {
             $name = trim($this->post->name ?? '');
-            $slug = strtolower(str_replace(' ', '-', $name));
             $data = [
-                'category_id' => (int) ($this->post->category_id ?? 0),
-                'name' => $name,
-                'slug' => $slug,
-                'description' => $this->post->description ?? '',
-                'short_description' => $this->post->short_description ?? '',
-                'price' => (float) ($this->post->price ?? 0),
-                'discount_percentage' => (float) ($this->post->discount_percentage ?? 0),
-                'available' => isset($this->post->available) ? 1 : 0,
+                'category_id' => $this->post->category_id,
+                'name' => $this->post->name,
+                'description' => $this->post->description,
+                'short_description' => $this->post->short_description,
+                'price' => $this->post->price,
+                'discount_percentage' => $this->post->discount_percentage,
+                'available' => $this->post->available == 1 ? 1 : 0,
                 'main_image' => $product->main_image,
+                'updated_at' => date('Y-m-d H:i:s')
             ];
+
+            error_log('POST data: ' . print_r($_POST, true));
+            error_log('Available checkbox: ' . (isset($this->post->available) ? 'set' : 'not set'));
+            error_log('Data to update: ' . print_r($data, true));
 
             $values = $data;
 
