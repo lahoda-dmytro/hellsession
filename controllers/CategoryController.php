@@ -70,11 +70,11 @@ class CategoryController extends Controller
         return $this->view('category/add', $this->data);
     }
 
-    public function editAction(int $id): array
+    public function editAction(string $slug): array
     {
         $this->checkAdminAccess();
 
-        $category = Category::getCategoryById($id);
+        $category = Category::findOneWhere(['slug' => $slug]);
         if (!$category) {
             Core::getInstance()->error(404);
             exit();
@@ -99,7 +99,7 @@ class CategoryController extends Controller
             }
 
             if (empty($errors)) {
-                if (Category::updateCategory($id, $values)) {
+                if (Category::updateCategory($category->id, $values)) {
                     header('Location: /?route=category/index');
                     exit();
                 } else {
@@ -124,11 +124,17 @@ class CategoryController extends Controller
         );
     }
 
-    public function deleteAction(int $id): void
+    public function deleteAction(string $slug): void
     {
         $this->checkAdminAccess();
 
-        if (Category::deleteCategory($id)) {
+        $category = Category::findOneWhere(['slug' => $slug]);
+        if (!$category) {
+            Core::getInstance()->error(404);
+            exit();
+        }
+
+        if (Category::deleteCategory($category->id)) {
             header('Location: /?route=category/index');
         } else {
             Core::getInstance()->error(500);

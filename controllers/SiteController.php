@@ -54,8 +54,8 @@ class SiteController extends Controller {
             'totalPages' => $totalPages
         ]);
     }
-    public function product_detailAction(int $id): array {
-        $product = \models\Product::getById($id);
+    public function product_detailAction(string $slug): array {
+        $product = \models\Product::getBySlug($slug);
 
         if (!$product) {
             Core::getInstance()->error(404);

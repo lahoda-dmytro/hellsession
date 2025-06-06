@@ -38,7 +38,7 @@ foreach ($products as $product) {
             <div class="items">
                 <?php foreach ($products as $product): ?>
                     <div class="item">
-                        <a href="/?route=site/product_detail/<?php echo $product->id; ?>" class="home-card d-flex flex-column align-items-center text-center">
+                        <a href="/?route=site/product_detail/<?php echo $product->slug; ?>" class="home-card d-flex flex-column align-items-center text-center">
                             <?php
 
                             if ($product->main_image): ?>

@@ -97,10 +97,10 @@ class ProductController extends Controller
         return $this->view('product/add', $this->data);
     }
 
-    public function editAction(int $id): array {
+    public function editAction(string $slug): array {
         $this->checkAdminAccess();
 
-        $product = Product::getProductById($id);
+        $product = Product::getBySlug($slug);
         if (!$product) {
             Core::getInstance()->error(404);
             exit();
@@ -144,7 +144,7 @@ class ProductController extends Controller
             }
 
             if (empty($errors)) {
-                if (Product::updateProduct($id, $data)) {
+                if (Product::updateProduct($product->id, $data)) {
                     header('Location: /?route=product/index');
                     exit();
                 } else {
@@ -165,29 +165,32 @@ class ProductController extends Controller
         return $this->view('product/edit', $this->data);
     }
 
-
-    public function deleteAction(int $id): void {
+    public function deleteAction(string $slug): void {
         $this->checkAdminAccess();
 
-        if (Product::deleteProduct($id)) {
+        $product = Product::getBySlug($slug);
+        if (!$product) {
+            Core::getInstance()->error(404);
+            exit();
+        }
+
+        if (Product::deleteProduct($product->id)) {
             header('Location: /?route=product/index');
         } else {
             Core::getInstance()->error(500);
         }
     }
 
-    public function viewAction(int $id): array {
-        $product = Product::getById($id);
+    public function viewAction(string $slug): array {
+        $product = Product::getBySlug($slug);
 
         if (!$product) {
             Core::getInstance()->error(404);
             exit();
         }
 
-        $product = Product::find($id);
         $category = Category::find($product->category_id);
-        $images = ProductImage::where(['product_id' => $id]);
-
+        $images = ProductImage::where(['product_id' => $product->id]);
 
         return $this->view('product/view', [
             'Title' => $product->name,

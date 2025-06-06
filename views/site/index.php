@@ -17,7 +17,7 @@
     </div>
     <div class="home-cards d-flex gap-4" style="flex-wrap: wrap; overflow: hidden;">
         <?php foreach ($discountedProducts as $product): ?>
-            <a href="/?route=site/product_detail/<?php echo $product->id; ?>" class="home-card d-flex flex-column align-items-center text-center">
+            <a href="/?route=site/product_detail/<?php echo $product->slug; ?>" class="home-card d-flex flex-column align-items-center text-center">
                 <?php if ($product->main_image): ?>
                     <img src="<?php echo htmlspecialchars($product->main_image); ?>" class="card-img" alt="<?php echo htmlspecialchars($product->name); ?>">
                 <?php else: ?>

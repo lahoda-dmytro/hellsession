@@ -35,10 +35,10 @@
             <td><?= $product->available ? 'В наявності' : 'Немає' ?></td>
             <td><?= htmlspecialchars($categoryMap[$product->category_id]->name ?? 'Невідома категорія') ?></td>
             <td>
-                <a href="/?route=product/view/<?= $product->id ?>">Перегляд</a>
+                <a href="/?route=product/view/<?= $product->slug ?>">Перегляд</a>
                 <?php if ($isAdmin): ?>
-                    | <a href="/?route=product/edit/<?= $product->id ?>">Редагувати</a>
-                    | <a href="/?route=product/delete/<?= $product->id ?>" onclick="return confirm('Видалити товар?')">Видалити</a>
+                    | <a href="/?route=product/edit/<?= $product->slug ?>">Редагувати</a>
+                    | <a href="/?route=product/delete/<?= $product->slug ?>" onclick="return confirm('Видалити товар?')">Видалити</a>
                 <?php endif; ?>
             </td>
         </tr>

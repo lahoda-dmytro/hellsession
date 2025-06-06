@@ -1,4 +1,5 @@
 <?php
+/**
  * @var \models\Product $product
  * @var \models\Category $category
  * @var \models\ProductImage[] $images
