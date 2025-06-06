@@ -13,9 +13,6 @@
 
 <h1><?= htmlspecialchars($Title ?? 'Products') ?></h1>
 
-<?php if (!empty($isAdmin)): ?>
-    <a href="/?route=product/add" class="btn btn-primary">Додати товар</a>
-<?php endif; ?>
 
 <table class="table">
     <thead>
@@ -45,3 +42,7 @@
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php if (!empty($isAdmin)): ?>
+    <a href="/?route=product/add" class="btn-secondary form-stylereg d-flex ">+ Додати товар</a>
+<?php endif; ?>
+

@@ -73,8 +73,8 @@
             <input type="checkbox" class="form-check-input" id="available" name="available" value="1" <?= (!isset($old['available']) || $old['available']) ? 'checked' : '' ?>>
             <label class="form-check-label" for="available">Товар доступний</label>
         </div>
-
-        <button type="submit" class="btn btn-primary">Додати товар</button>
-        <a href="/?route=product/index" class="btn btn-secondary">Скасувати</a>
     </form>
+    <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Додати товар</button><br>
 </div>
+
+

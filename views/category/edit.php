@@ -18,13 +18,12 @@
     </div>
 <?php endif; ?>
 
-<section class="login-reg d-flex d-block mx-auto w-50">
     <div class="login-title">
         <h2><?= htmlspecialchars($title ?? 'Редагувати категорію') ?></h2>
-        <form method="post" action="/?route=category/edit/<?= $category->id ?>">
+        <form method="post" action="/?route=category/edit/<?= $category->slug ?>">
             <label for="name" class="form-label form-stylereg">Назва:</label><br>
             <input type="text" id="name" name="name" class="form-control form-stylereg w-20" id="id_first_name"
-                   value="<?= htmlspecialchars($old['name'] ?? $category->name) ?>" required><br><br>
+                   value="<?= htmlspecialchars($old['name'] ?? $category->name) ?>" required><br>
 
             <label for="description" class="form-label form-stylereg">Опис:</label><br>
             <textarea id="description" class="form-control form-stylereg w-100"
@@ -33,4 +32,3 @@
             <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Оновити категорію</button>
         </form>
     </div>
-</section>

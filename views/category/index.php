@@ -26,7 +26,7 @@
                 <td><?= $category->updated_at ?></td>
                 <?php if (!empty($isAdmin)): ?>
                     <td>
-                        <a href="/?route=category/edit/<?= $category->slug ?>" class="btn-secondary btn-sm ">Редагувати</a>
+                        <a href="/?route=category/edit/<?= $category->slug ?>" class="btn-secondary btn-sm ">Редагувати</a> |
                         <a href="/?route=category/delete/<?= $category->slug ?>" class="btn-secondary btn-sm">Видалити</a>
                     </td>
                 <?php endif; ?>

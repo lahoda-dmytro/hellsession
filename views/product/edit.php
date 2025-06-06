@@ -72,13 +72,13 @@
         <div class="mb-3">
             <label class="form-label">Додаткові зображення</label>
             <?php if (!empty($images)): ?>
-                <div class="row mb-2">
+                <div class="row mb-2" id="imageGallery">
                     <?php foreach ($images as $image): ?>
-                        <div class="col-md-3 mb-2">
+                        <div class="col-md-3 mb-2" data-image-id="<?= $image->id ?>">
                             <div class="card">
                                 <img src="<?= htmlspecialchars($image->image_path) ?>" class="card-img-top" alt="Додаткове зображення">
                                 <div class="card-body">
-                                    <a href="/?route=product/deleteImage&id=<?= $image->id ?>" class="btn btn-danger btn-sm" onclick="return confirm('Ви впевнені, що хочете видалити це зображення?')">Видалити</a>
+                                    <a href="/?route=product/deleteImage&id=<?= $image->id ?>" class="btn btn-light" onclick="return confirm('Ви впевнені, що хочете видалити це зображення?')">Видалити</a>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +93,38 @@
             <input type="checkbox" class="form-check-input" id="available" name="available" value="1" <?= $old['available'] ? 'checked' : '' ?>>
             <label class="form-check-label" for="available">Товар доступний</label>
         </div>
-
-        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
-        <a href="/?route=product/index" class="btn btn-secondary">Скасувати</a>
     </form>
+    <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Зберегти зміни</button><br>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const gallery = document.getElementById('imageGallery');
+    if (gallery) {
+        new Sortable(gallery, {
+            animation: 150,
+            onEnd: function() {
+                const imageIds = Array.from(gallery.children).map(item => item.dataset.imageId);
+                fetch('/?route=product/reorderImages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'product_id=<?= $product_id ?>&image_ids=' + JSON.stringify(imageIds)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Помилка при збереженні порядку зображень');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Помилка при збереженні порядку зображень');
+                });
+            }
+        });
+    }
+});
+</script>

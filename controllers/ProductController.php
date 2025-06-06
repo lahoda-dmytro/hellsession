@@ -265,7 +265,7 @@ class ProductController extends Controller
         }
     }
 
-    public function viewAction(string $slug): array {
+    public function viewAction(string $slug): void {
         $product = Product::getBySlug($slug);
 
         if (!$product) {
@@ -273,20 +273,18 @@ class ProductController extends Controller
             exit();
         }
 
-        $category = Category::find($product->category_id);
-        $images = ProductImage::where(['product_id' => $product->id]);
-
-        return $this->view('product/view', [
-            'Title' => $product->name,
-            'product' => $product,
-            'category' => $category,
-            'images' => $images,
-            'isAdmin' => User::getCurrentUser()?->is_superuser ?? false
-        ]);
+        header('Location: /?route=site/product_detail/' . $slug);
+        exit();
     }
 
-    public function deleteImageAction(int $id): void {
+    public function deleteImageAction(): void {
         $this->checkAdminAccess();
+
+        $id = (int)($this->get->id ?? 0);
+        if (!$id) {
+            Core::getInstance()->error(400);
+            exit();
+        }
 
         $image = ProductImage::find($id);
         if (!$image) {
@@ -295,14 +293,46 @@ class ProductController extends Controller
         }
 
         $filePath = $_SERVER['DOCUMENT_ROOT'] . $image->image_path;
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        if (file_exists($filePath) && is_writable($filePath)) {
+            if (!unlink($filePath)) {
+                error_log("Не вдалося видалити файл: " . $filePath);
+                Core::getInstance()->error(500);
+                exit();
+            }
         }
 
-        if (ProductImage::deleteImage($id)) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        if (!ProductImage::deleteImage($id)) {
+            error_log("Не вдалося видалити запис зображення з бази даних: " . $id);
+            Core::getInstance()->error(500);
+            exit();
+        }
+
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
+    public function reorderImagesAction(): void {
+        $this->checkAdminAccess();
+
+        if (!$this->isPost) {
+            Core::getInstance()->error(405);
+            exit();
+        }
+
+        $productId = (int)($this->post->product_id ?? 0);
+        $imageIds = $this->post->image_ids ?? [];
+
+        if (!$productId || empty($imageIds)) {
+            Core::getInstance()->error(400);
+            exit();
+        }
+
+        if (ProductImage::reorderImages($productId, $imageIds)) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
         } else {
             Core::getInstance()->error(500);
         }
+        exit();
     }
 }

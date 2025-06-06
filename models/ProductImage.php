@@ -27,4 +27,24 @@ class ProductImage extends Model {
     public static function deleteImage(int $id): bool {
         return self::delete($id) > 0;
     }
+
+    public static function updateSortOrder(int $id, int $newSortOrder): bool {
+        $image = self::find($id);
+        if (!$image) {
+            return false;
+        }
+        $image->sort_order = $newSortOrder;
+        return $image->save();
+    }
+
+    public static function reorderImages(int $productId, array $imageIds): bool {
+        $sortOrder = 10;
+        foreach ($imageIds as $id) {
+            if (!self::updateSortOrder($id, $sortOrder)) {
+                return false;
+            }
+            $sortOrder += 10;
+        }
+        return true;
+    }
 }

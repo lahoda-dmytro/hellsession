@@ -82,10 +82,15 @@ error_reporting(E_ALL);
         <?=$Content ?>
     </div>
 
+    <?php
+    $currentModule = \classes\Core::getInstance()->module;
+    if ($currentModule !== 'product' && $currentModule !== 'category'):
+    ?>
     <img src="/static/img/frame1.png" class="frame1" alt="">
     <img src="/static/img/frame2.png" class="frame2" alt="">
     <img src="/static/img/frame3.png" class="frame3" alt="">
     <img src="/static/img/frame4.png" class="frame4" alt="">
+    <?php endif; ?>
 
 <!--    <footer class="mt-auto flex-shrink-0">-->
 <!--        <div class="container nav justify-content-center border-top pb-3 mb-3">-->
