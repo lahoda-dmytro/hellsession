@@ -116,7 +116,7 @@ class Product extends Model {
         
         return null;
     }
-    public static function getDiscountedProducts(int $limit = 4): array {
+    public static function getDiscountedProducts(int $limit = 3): array {
         $query = "SELECT * FROM products WHERE discount_percentage > 0 AND available = 1 ORDER BY discount_percentage DESC LIMIT ?";
         $results = self::query($query, [$limit]);
         

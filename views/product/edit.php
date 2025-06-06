@@ -54,7 +54,6 @@
                 </option>
             <?php endforeach; ?>
         </select>
-
     </div>
 
     <div>
@@ -69,6 +68,12 @@
             <br>
             <img src="<?= htmlspecialchars($old['main_image']) ?>" alt="Головне зображення" width="150">
         <?php endif; ?>
+    </div>
+
+    <div>
+        <label for="product_images">Додаткові зображення:</label>
+        <input id="product_images" type="file" name="product_images[]" accept="image/*" multiple>
+        <small>Можна вибрати кілька зображень, утримуючи Ctrl (Cmd на Mac)</small>
     </div>
 
     <button type="submit">Зберегти</button>

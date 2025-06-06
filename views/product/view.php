@@ -16,7 +16,7 @@
 <p><strong>Опис:</strong> <?= nl2br(htmlspecialchars($product->description)) ?></p>
 
 <?php if ($product->main_image): ?>
-    <p><img src="<?= htmlspecialchars($product->main_image) ?>" alt="<?= htmlspecialchars($product->name) ?>" width="200"></p>
+    <p><img src="/<?= htmlspecialchars($product->main_image) ?>" alt="<?= htmlspecialchars($product->name) ?>" width="200"></p>
 <?php endif; ?>
 
 <h2>Галерея</h2>
@@ -24,7 +24,7 @@
 <?php if (!empty($images)): ?>
     <div class="gallery">
         <?php foreach ($images as $image): ?>
-            <img src="<?= htmlspecialchars($image->image_path) ?>" width="200">
+            <img src="/<?= htmlspecialchars($image->image_path) ?>" width="200">
         <?php endforeach; ?>
 
     </div>

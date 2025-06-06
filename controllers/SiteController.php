@@ -22,7 +22,7 @@ class SiteController extends Controller {
     public function productsAction(): array {
         $categorySlug = $_GET['category'] ?? null;
         $page = max(1, intval($_GET['page'] ?? 1));
-        $perPage = 12;
+        $perPage = 10;
 
         $categories = \models\Category::getCategories();
 
