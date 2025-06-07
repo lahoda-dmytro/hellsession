@@ -30,17 +30,21 @@
         
         <?php if ($product->discount_percentage > 0): ?>
             <div class="cart-discount d-flex gap-2">
-                <p class="line">₴ <?= number_format($product->price, 2) ?></p>
-                <p class="price">₴ <?= number_format($product->price * (1 - $product->discount_percentage / 100), 2) ?></p>
+                <p class="line">$ <?= number_format($product->price, 2) ?></p>
+                <p class="price">$ <?= number_format($product->price * (1 - $product->discount_percentage / 100), 2) ?></p>
             </div>
         <?php else: ?>
-            <p class="price">₴ <?= number_format($product->price, 2) ?></p>
+            <p class="price">$ <?= number_format($product->price, 2) ?></p>
         <?php endif; ?>
         
-        <form action="/?route=cart/add/<?= $product->id ?>" class="qform" method="post">
+        <form action="/?route=cart/add/<?= $product->slug ?>" class="qform" method="post">
             <div class="cart-form" style="display: flex; align-items: center; gap: 10px;">
                 <label for="quantity">Кількість:</label> 
-                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?= $product->available ?>" class="form-control" style="width: auto; border: none;">
+                <select name="quantity" id="quantity" class="form-control" style="width: auto; border: none;">
+                    <?php for($i = 1; $i <= 10; $i++): ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                    <?php endfor; ?>
+                </select>
                 <?php if (isset($_SESSION['csrf_token'])): ?>
                     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <?php endif; ?>

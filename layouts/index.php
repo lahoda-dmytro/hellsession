@@ -42,8 +42,14 @@ error_reporting(E_ALL);
                 <?php if(!\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
                     <li>
-                        <a href="#"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
-                        <p class="cart-quantity">3</p>
+                        <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
+                        <?php 
+                        $cart = new \models\Cart();
+                        $quantity = $cart->getTotalQuantity();
+                        if ($quantity > 0 && $quantity <= 10): 
+                        ?>
+                            <p class="cart-quantity"><?php echo $quantity; ?></p>
+                        <?php endif; ?>
                     </li>
                     <li>
                         <a href="/?route=users/login" class="header-list m-3">login</a>
@@ -57,8 +63,14 @@ error_reporting(E_ALL);
                 <?php if(\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
                     <li>
-                        <a href="#"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
-                        <p class="cart-quantity">3</p>
+                        <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
+                        <?php 
+                        $cart = new \models\Cart();
+                        $quantity = $cart->getTotalQuantity();
+                        if ($quantity > 0 && $quantity <= 10): 
+                        ?>
+                            <p class="cart-quantity"><?php echo $quantity; ?></p>
+                        <?php endif; ?>
                     </li>
                     <li>
                         <a href="/users/profile" class="header-list m-3">profile</a>

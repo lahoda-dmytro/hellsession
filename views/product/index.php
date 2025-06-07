@@ -14,14 +14,14 @@
 <h1><?= htmlspecialchars($Title ?? 'Products') ?></h1>
 
 
-<table class="table">
+<table class="table table-hover">
     <thead>
     <tr>
-        <th>Назва</th>
-        <th>Ціна</th>
-        <th>Наявність</th>
-        <th>Категорія</th>
-        <th>Дії</th>
+        <th scope="col">Назва</th>
+        <th scope="col">Ціна</th>
+        <th scope="col">Наявність</th>
+        <th scope="col">Категорія</th>
+        <th scope="col">Дії</th>
     </tr>
     </thead>
     <tbody>
