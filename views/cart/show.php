@@ -22,7 +22,20 @@
                             <p><?php echo htmlspecialchars($product->name); ?></p>
                         </div>
                         <div class="cart-card-q">
-                            <p>Quantity: <?php echo $item['quantity']; ?></p>
+                            <form action="/?route=cart/add/<?php echo $product->slug; ?>" method="post" class="qform">
+                                <div class="cart-form" style="display: flex; align-items: center; gap: 10px;">
+                                    <label for="quantity_<?php echo $product->id; ?>">Quantity:</label>
+                                    <select name="quantity" id="quantity_<?php echo $product->id; ?>" onchange="this.form.submit()" class="form-control" style="width: auto; border: none;">
+                                        <?php for($i = 1; $i <= 10; $i++): ?>
+                                            <option value="<?php echo $i; ?>" <?php if($item['quantity'] == $i) echo 'selected'; ?>><?php echo $i; ?></option>
+                                        <?php endfor; ?>
+                                    </select>
+                                </div>
+                                <input type="hidden" name="override" value="true">
+                                <?php if (isset($_SESSION['csrf_token'])): ?>
+                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                <?php endif; ?>
+                            </form>
                         </div>
                     </div>
                     <form action="/?route=cart/remove/<?php echo $product->slug; ?>" method="post">
@@ -46,7 +59,11 @@
         <?php endforeach; ?>
     </div>
     <div class="total">
-        <h5>Total sum: $<?php echo number_format($total, 2); ?></h5>
+        <?php if (count($items) === 0): ?>
+            <h5>No products in cart</h5>
+        <?php else: ?>
+            <h5>Total sum: $<?php echo number_format($total, 2); ?></h5>
+        <?php endif; ?>
     </div>
     <div class="cart-buttons d-flex gap-3">
         <a href="/?route=site/products" class="cart-btn">Continue shopping</a>

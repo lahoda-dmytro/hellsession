@@ -20,7 +20,12 @@
                        required placeholder="Your Password">
             </div>
             <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Login</button>
-
+            <div class="reset-pass">
+                <hr>
+                <div class="mt-3">
+                    <a href="#">Reset Password</a> | <a href="/?route=users/register">Create Account</a>
+                </div>
+            </div>
 
             <?php if (isset($errors) && !empty($errors)):?>
                 <div class="alert">

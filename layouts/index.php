@@ -46,10 +46,17 @@ error_reporting(E_ALL);
                         <?php 
                         $cart = new \models\Cart();
                         $quantity = $cart->getTotalQuantity();
-                        if ($quantity > 0 && $quantity <= 10): 
+                        $display_quantity = '';
+
+                        if ($quantity == 0) {
+                            $display_quantity = '0';
+                        } elseif ($quantity > 0 && $quantity <= 9) {
+                            $display_quantity = $quantity;
+                        } else {
+                            $display_quantity = '9+';
+                        }
                         ?>
-                            <p class="cart-quantity"><?php echo $quantity; ?></p>
-                        <?php endif; ?>
+                        <p class="cart-quantity"><?php echo $display_quantity; ?></p>
                     </li>
                     <li>
                         <a href="/?route=users/login" class="header-list m-3">login</a>
@@ -67,10 +74,17 @@ error_reporting(E_ALL);
                         <?php 
                         $cart = new \models\Cart();
                         $quantity = $cart->getTotalQuantity();
-                        if ($quantity > 0 && $quantity <= 10): 
+                        $display_quantity = '';
+
+                        if ($quantity == 0) {
+                            $display_quantity = '0';
+                        } elseif ($quantity > 0 && $quantity <= 9) {
+                            $display_quantity = $quantity;
+                        } else {
+                            $display_quantity = '9+';
+                        }
                         ?>
-                            <p class="cart-quantity"><?php echo $quantity; ?></p>
-                        <?php endif; ?>
+                        <p class="cart-quantity"><?php echo $display_quantity; ?></p>
                     </li>
                     <li>
                         <a href="/users/profile" class="header-list m-3">profile</a>
