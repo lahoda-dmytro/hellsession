@@ -1,0 +1,1 @@
+<?php\n/**\n * @var string $Title\n */\n?>\n\n<h1 class=\"text-center mt-5\">Your order was created</h1> 
