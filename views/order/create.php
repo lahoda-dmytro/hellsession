@@ -6,66 +6,102 @@
  */
 ?>
 
-<div class="forcreate">
-    <div class="profile bg-white p-4 mb-4 mx-2">
-        <h2 class="mb-2">Create Order</h2>
-        <form action="/?route=order/create" method="post" class="order-form">
-            <?php if (!empty($errors)): ?>
-                <div class="alert alert-danger">
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?php echo htmlspecialchars($error); ?></li>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="bg-white p-4 mb-4 rounded">
+                <h2 class="mb-2">Create Order</h2>
+                <form action="/?route=order/create" method="post" class="order-form">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-danger">
+                            <ul>
+                                <?php foreach ($errors as $error): ?>
+                                    <li><?php echo htmlspecialchars($error); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_first_name"
+                            name="first_name" placeholder="Your First Name" value="<?php echo htmlspecialchars($form_data['first_name'] ?? ''); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_address" class="form-label">Address</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_address"
+                            name="address" placeholder="Your Address" value="<?php echo htmlspecialchars($form_data['address'] ?? ''); ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_last_name"
+                            name="last_name" placeholder="Your Last Name" value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_postal_code" class="form-label">Postal Code</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_postal_code"
+                            name="postal_code" placeholder="Your Postal Code" value="<?php echo htmlspecialchars($form_data['postal_code'] ?? ''); ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_email"
+                            name="email" placeholder="Your Email" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_city" class="form-label">City</label>
+                            <input type="text" class="form-control form-styleprofile" id="id_city"
+                            name="city" placeholder="Your City" value="<?php echo htmlspecialchars($form_data['city'] ?? ''); ?>" required>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p>Total sum: $<?php echo number_format($cart->getTotalPrice(), 2); ?></p>
+                        <input type="submit" value="Create Order" class="profile-btn">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="bg-white p-4 mb-4 rounded">
+                <h2 class="mb-2">Your Cart</h2>
+                <div class="cart-cards">
+                    <?php if ($cart->getTotalQuantity() > 0):?>
+                        <?php foreach ($cart->getItems() as $item): ?>
+                            <?php $product = \models\Product::getById($item['product_id']); ?>
+                            <?php if ($product && is_object($product)): ?>
+                                <div class="cart-card d-flex align-items-center mb-3">
+                                    <div class="cart-card-img me-3">
+                                        <img src="<?php echo $product->main_image ?: '/static/img/noimage.jpg'; ?>" alt="<?php echo htmlspecialchars($product->name); ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
+                                    </div>
+                                    <div class="cart-card-info flex-grow-1">
+                                        <div class="cart-card-name">
+                                            <p class="mb-0"><strong><?php echo htmlspecialchars($product->name); ?></strong></p>
+                                        </div>
+                                        <div class="cart-card-q">
+                                            <p class="mb-0">Кількість: <?php echo $item['quantity']; ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="cart-card-price ms-auto">
+                                        <?php if ($product->discount_percentage > 0): ?>
+                                            <div class="cart-discount gap-2">
+                                                <p class="line">$<?php echo number_format($product->price, 2); ?></p>
+                                                <p class="price mt-3">$<?php echo number_format($product->price * (1 - $product->discount_percentage / 100), 2); ?></p>
+                                            </div>
+                                        <?php else: ?>
+                                            <p class="price mt-3">$<?php echo number_format($product->price, 2); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
-                    </ul>
+                    <?php else: ?>
+                        <p>Кошик порожній.</p>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-            <div class="col-md-12 mb-3">
-                <label for="id_first_name" class="form-label">First Name</label>
-                <input type="text" class="form-control form-styleprofile" id="id_first_name"
-                name="first_name" placeholder="Your First Name" value="<?php echo htmlspecialchars($form_data['first_name'] ?? ''); ?>" required>
             </div>
-            <div class="col-md-12 mb-3">
-                <label for="id_last_name" class="form-label">Last Name</label>
-                <input type="text" class="form-control form-styleprofile" id="id_last_name"
-                name="last_name" placeholder="Your Last Name" value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>" required>
-            </div>
-            <div class="col-md-12 mb-3">
-                <label for="id_email" class="form-label">Email</label>
-                <input type="text" class="form-control form-styleprofile" id="id_email"
-                name="email" placeholder="Your Email" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>" required>
-            </div>
-
-            <div class="col-md-12 mb-3">
-                <label for="id_address" class="form-label">Address</label>
-                <input type="text" class="form-control form-styleprofile" id="id_address"
-                name="address" placeholder="Your Address" value="<?php echo htmlspecialchars($form_data['address'] ?? ''); ?>" required>
-            </div>
-            <div class="col-md-12 mb-3">
-                <label for="id_postal_code" class="form-label">Postal Code</label>
-                <input type="text" class="form-control form-styleprofile" id="id_postal_code"
-                name="postal_code" placeholder="Your Postal Code" value="<?php echo htmlspecialchars($form_data['postal_code'] ?? ''); ?>" required>
-            </div>
-            <div class="col-md-12 mb-3">
-                <label for="id_city" class="form-label">City</label>
-                <input type="text" class="form-control form-styleprofile" id="id_city"
-                name="city" placeholder="Your City" value="<?php echo htmlspecialchars($form_data['city'] ?? ''); ?>" required>
-            </div>
-            <p><input type="submit" value="Place Order"></p>
-        </form>
-    </div>
-    <div class="checkout">
-        <h1>Checkout</h1>
-        <div class="order-info">
-            <?php foreach ($cart->getItems() as $item): ?>
-                <?php $product = \models\Product::getById($item['product_id']); ?>
-                <?php if ($product && is_object($product)): ?>
-                    <li>
-                        <?php echo $item['quantity']; ?>x <?php echo htmlspecialchars($product->name); ?>
-                        <p>$ <?php echo number_format($item['price'] * $item['quantity'], 2); ?></p>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <p>Total: $ <?php echo number_format($cart->getTotalPrice(), 2); ?></p>
         </div>
     </div>
 </div>

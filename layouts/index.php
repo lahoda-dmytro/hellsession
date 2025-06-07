@@ -87,7 +87,7 @@ error_reporting(E_ALL);
                         <p class="cart-quantity"><?php echo $display_quantity; ?></p>
                     </li>
                     <li>
-                        <a href="/users/profile" class="header-list m-3">profile</a>
+                        <a href="/?route=users/profile" class="header-list m-3">profile</a>
                     </li>
 <!--                    <li>-->
 <!--                        <a href="/users/logout" class="header-list m-3">logout</a>-->

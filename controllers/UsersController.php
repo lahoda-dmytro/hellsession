@@ -5,6 +5,7 @@ namespace controllers;
 use classes\Controller;
 use classes\Core;
 use models\User;
+use models\Order;
 
 class UsersController extends Controller {
 
@@ -109,5 +110,91 @@ class UsersController extends Controller {
         ]);
 
         return $this->view('Register', $this->data);
+    }
+
+    public function profileAction(): array
+    {
+        if (!User::isLoggedIn()) {
+            header('Location: /?route=users/login');
+            exit();
+        }
+
+        $user = User::getCurrentUser();
+        $errors = [];
+        $form_data = [];
+
+        if ($this->isPost) {
+            $post_data = $this->post;
+
+            $form_data = [
+                'first_name' => trim($post_data->first_name ?? ''),
+                'last_name' => trim($post_data->last_name ?? ''),
+                'username' => trim($post_data->username ?? ''),
+                'email' => trim($post_data->email ?? ''),
+            ];
+
+            if (empty($form_data['first_name'])) {
+                $errors[] = 'First Name is required.';
+            }
+            if (empty($form_data['last_name'])) {
+                $errors[] = 'Last Name is required.';
+            }
+            if (empty($form_data['username'])) {
+                $errors[] = 'Username is required.';
+            }
+            if (empty($form_data['email'])) {
+                $errors[] = 'Email is required.';
+            } elseif (!filter_var($form_data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid email format.';
+            }
+
+            if (empty($errors)) {
+                $existingUserByUsername = User::findOneWhere(['username' => $form_data['username']]);
+                if ($existingUserByUsername && $existingUserByUsername->id !== $user->id) {
+                    $errors[] = 'This username is already taken.';
+                }
+
+                $existingUserByEmail = User::findOneWhere(['email' => $form_data['email']]);
+                if ($existingUserByEmail && $existingUserByEmail->id !== $user->id) {
+                    $errors[] = 'This email is already taken.';
+                }
+            }
+
+            if (empty($errors)) {
+                $user->first_name = $form_data['first_name'];
+                $user->last_name = $form_data['last_name'];
+                $user->username = $form_data['username'];
+                $user->email = $form_data['email'];
+
+                if ($user->save()) {
+                    if ($user->username !== Core::getInstance()->session->get('username')) {
+                        Core::getInstance()->session->set('username', $user->username);
+                    }
+                    header('Location: /?route=users/profile&message=Profile updated successfully!');
+                    exit();
+                } else {
+                    $errors[] = 'Failed to save profile changes.';
+                }
+            }
+        } else {
+            $form_data = [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'username' => $user->username,
+                'email' => $user->email,
+            ];
+        }
+
+        $orders = Order::findAllWhere(['user_id' => $user->id], ['created_at' => 'DESC']);
+
+        $this->addData([
+            'user' => $user,
+            'orders' => $orders,
+            'form_data' => $form_data,
+            'errors' => $errors,
+            'message' => $this->get->message
+        ]);
+
+        return $this->view('Profile', $this->data);
     }
 }

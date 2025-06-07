@@ -27,17 +27,14 @@ class Model {
         return $this->fieldArray;
     }
 
-    //видалення з бд за умовами, якщо передано лише айді, видалям за ключем
     public static function delete(mixed $conditions): int {
         $instance = new static();
 
         $db = Core::getInstance()->db;
 
         if (is_array($conditions)) {
-            // видалення за масивом умов
             return $db->delete($instance->table, $conditions);
         } else {
-            // видалення за первинним ключем
             return $db->delete($instance->table, [$instance->primaryKey => $conditions]);
         }
     }
@@ -132,5 +129,28 @@ class Model {
     public static function query(string $query, array $params = []): array {
         $db = Core::getInstance()->db;
         return $db->query($query, $params);
+    }
+
+    public static function findAllWhere(array $where = [], array $orderBy = [], int $limit = 0): array
+    {
+        $instance = new static();
+        $db = Core::getInstance()->db;
+
+        $orderByString = '';
+        if (!empty($orderBy)) {
+            $orderByParts = [];
+            foreach ($orderBy as $column => $direction) {
+                $orderByParts[] = "`{$column}` " . strtoupper($direction);
+            }
+            $orderByString = implode(', ', $orderByParts);
+        }
+
+        $results = $db->select($instance->table, '*', $where, $orderByString, $limit);
+
+        $models = [];
+        foreach ($results as $data) {
+            $models[] = new static($data);
+        }
+        return $models;
     }
 }

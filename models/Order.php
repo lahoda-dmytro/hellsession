@@ -34,7 +34,7 @@ class Order extends Model
 
     public function getOrderItems(): array
     {
-        return OrderItem::where(['order_id' => $this->id]);
+        return OrderItem::findAllWhere(['order_id' => $this->id]);
     }
 
     public function getTotalCost(): float
