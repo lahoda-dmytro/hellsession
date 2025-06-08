@@ -89,6 +89,11 @@ error_reporting(E_ALL);
                     <li>
                         <a href="/?route=users/profile" class="header-list m-3">profile</a>
                     </li>
+                    <?php if(isset($_SESSION['user']) && $_SESSION['user']['is_admin']): ?>
+                    <li>
+                        <a href="/?route=admin/index" class="header-list m-3">admin panel</a>
+                    </li>
+                    <?php endif; ?>
 <!--                    <li>-->
 <!--                        <a href="/users/logout" class="header-list m-3">logout</a>-->
 <!--                    </li>-->
@@ -125,6 +130,26 @@ error_reporting(E_ALL);
 <!--            2025 Hell Session Store-->
 <!--        </div>-->
 <!--    </footer>-->
+
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
 
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

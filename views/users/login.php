@@ -12,7 +12,7 @@
                 <label for="username" class="form-label form-stylereg">Username:</label>
                 <input type="text" id="username" name="username" class="form-control form-stylereg"
                        value="<?= htmlspecialchars($username ?? '') ?>"
-                           required placeholder="Your Name">
+                       required placeholder="Your Name">
             </div>
             <div class="col-md-6 mb-3">
                 <label for="password" class="form-label form-stylereg">Password:</label>
