@@ -161,6 +161,12 @@ class OrderController extends Controller
             exit();
         }
 
+        $orderItems = $order->getOrderItems();
+        $products = [];
+        foreach ($orderItems as $item) {
+            $products[$item->product_id] = \models\Product::getById($item->product_id);
+        }
+
         $errors = [];
         $values = [
             'first_name' => $order->first_name,
@@ -211,6 +217,8 @@ class OrderController extends Controller
         $this->addData([
             'Title' => 'Редагування замовлення #' . $order->id,
             'order' => $order,
+            'orderItems' => $orderItems,
+            'products' => $products,
             'errors' => $errors,
             'old' => $values,
             'isAdmin' => true

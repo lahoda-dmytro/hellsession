@@ -239,6 +239,7 @@ class ProductController extends Controller
         $this->addData([
             'Title' => 'Редагувати товар',
             'product_id' => $product->id,
+            'product' => $product,
             'old' => $values,
             'errors' => $errors,
             'categories' => $categories,

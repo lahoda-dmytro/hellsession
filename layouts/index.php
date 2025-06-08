@@ -110,7 +110,9 @@ error_reporting(E_ALL);
 
     <?php
     $currentModule = \classes\Core::getInstance()->module;
-    if ($currentModule !== 'product' && $currentModule !== 'category'):
+    $currentAction = \classes\Core::getInstance()->action;
+    $isAdminOrderPage = $currentModule === 'order' && in_array($currentAction, ['index', 'view', 'edit']);
+    if ($currentModule !== 'product' && $currentModule !== 'category' && !$isAdminOrderPage):
     ?>
     <img src="/static/img/frame1.png" class="frame1" alt="">
     <img src="/static/img/frame2.png" class="frame2" alt="">

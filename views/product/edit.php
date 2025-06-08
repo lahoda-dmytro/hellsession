@@ -4,11 +4,26 @@
  * @var array $errors
  * @var array $old
  * @var string $Title
+ * @var \models\Product|null $product
+ * @var int|null $product_id
+ * @var \models\ProductImage[] $images
  */
 ?>
 
 <div class="container mt-4">
     <h1>Редагувати товар</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="/?route=product/index" class="nav-a">← Назад до списку</a>
+        </div>
+        <div>
+            <?php if (isset($product) && $product instanceof \models\Product): ?>
+                <a href="/?route=product/view/<?= htmlspecialchars($product->slug) ?>" class="nav-a">Переглянути товар</a>
+                | <a href="/?route=product/delete/<?= htmlspecialchars($product->slug) ?>" class="nav-a" onclick="return confirm('Видалити товар?')">Видалити</a>
+            <?php endif; ?>
+        </div>
+    </div>
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger">
@@ -94,7 +109,7 @@
             <label class="form-check-label" for="available">Товар доступний</label>
         </div>
     </form>
-    <button type="submit" class="login-btn form-stylereg d-flex d-block w-20">Зберегти зміни</button><br>
+    <button type="submit" class="login-btn">Зберегти зміни</button><br>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -111,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: 'product_id=<?= $product_id ?>&image_ids=' + JSON.stringify(imageIds)
+                    body: 'product_id=<?php if (isset($product_id)) echo $product_id; ?>&image_ids=' + JSON.stringify(imageIds)
                 })
                 .then(response => response.json())
                 .then(data => {
