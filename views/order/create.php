@@ -63,7 +63,7 @@
 
                         <div class="mt-3">
                             <h5>Total sum: $<?php echo number_format($cart->getTotalPrice(), 2); ?></h5><br>
-                            <p><input type="submit" value="Place Order"></p>
+                            <p><input type="submit" value="Proceed to Payment"></p>
                         </div>
                     </form>
                 </div>

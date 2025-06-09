@@ -74,8 +74,9 @@ class OrderController extends Controller
                         }
                     }
                     $cart->clear();
+                    $_SESSION['order_id'] = $order->id;
 
-                    header('Location: /?route=order/created');
+                    header('Location: /?route=payment/process');
                     exit;
                 } else {
                     $errors[] = 'Не вдалося створити замовлення.';
