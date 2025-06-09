@@ -1,3 +1,4 @@
-<h1>Оплату скасовано</h1>
-<p>Оплату було скасовано. Якщо виникли проблеми, спробуйте ще раз або зверніться до служби підтримки.</p>
-<p><a href="/?route=cart/show">Повернутися до кошика</a></p> 
+<div class="text-center mt-5">
+    <h1>Payment was canceled</h1>
+    <p><a href="/?route=site/index">Home Page</a></p>
+</div>
