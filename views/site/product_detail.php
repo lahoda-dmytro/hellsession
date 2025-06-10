@@ -12,11 +12,11 @@
         <?php else: ?>
             <img class="detail-image" src="/static/img/noimage.jpg" alt="No image available" style="display: block;" data-index="0">
         <?php endif; ?>
-        
+
         <?php foreach ($images as $index => $image): ?>
             <img class="detail-image" src="<?= htmlspecialchars($image->image_path) ?>" alt="<?= htmlspecialchars($product->name) ?>" style="display: none;" data-index="<?= $index + 1 ?>">
         <?php endforeach; ?>
-        
+
         <div class="image-nav">
             <button class="prev-btn">&lsaquo;</button>
             <button class="next-btn">&rsaquo;</button>
@@ -27,7 +27,7 @@
         <h2><?= htmlspecialchars($product->name) ?></h2>
         <h3>Категорія: <?= $category ? htmlspecialchars($category->name) : '—' ?></h3>
         <p>Опис: <?= nl2br(htmlspecialchars($product->description)) ?></p>
-        
+
         <?php if ($product->discount_percentage > 0): ?>
             <div class="cart-discount d-flex gap-2">
                 <p class="line">$ <?= number_format($product->price, 2) ?></p>
@@ -36,21 +36,18 @@
         <?php else: ?>
             <p class="price">$ <?= number_format($product->price, 2) ?></p>
         <?php endif; ?>
-        
-        <form action="/?route=cart/add/<?= $product->slug ?>" class="qform" method="post">
+
+        <div class="qform">
             <div class="cart-form" style="display: flex; align-items: center; gap: 10px;">
-                <label for="quantity">Кількість:</label> 
-                <select name="quantity" id="quantity" class="form-control" style="width: auto; border: none;">
+                <label for="quantity-<?= $product->id ?>">Кількість:</label>
+                <select name="quantity" id="quantity-<?= $product->id ?>" class="form-control product-quantity-select" style="width: auto; border: none;">
                     <?php for($i = 1; $i <= 10; $i++): ?>
                         <option value="<?= $i ?>"><?= $i ?></option>
                     <?php endfor; ?>
                 </select>
-                <?php if (isset($_SESSION['csrf_token'])): ?>
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                <?php endif; ?>
             </div>
-            <input type="submit" class="add-to-cart-btn" value="Додати в кошик">
-        </form>
+            <button type="button" class="add-to-cart-btn" data-product-id="<?= $product->id ?>">Додати в кошик</button>
+        </div>
     </div>
 </div>
 

@@ -20,137 +20,85 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="/static/css/base.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <header class="header sticky-top flex-shrink-0">
-        <div class="header-container d-flex">
-            <navbar class="header-nav pt-4">
-                <ul class="header-list d-flex">
-                    <li>
-<!--                        main page-->
-                        <a href="/" class="nav-a m-3">home</a>
-                    </li>
-                    <li>
-<!--                        products(index) list + category-->
-                        <a href="/?route=site/products" class="nav-a m-3">shop</a>
-                    </li>
-                </ul>
-            </navbar>
-            <div class="header-logo">
-                <a href="/"><img src="/static/img/qwewwq.png" alt="logo" class="heavy-logo"></a>
-            </div>
-            <navbar class="header-nav pt-4">
+<header class="header sticky-top flex-shrink-0">
+    <div class="header-container d-flex">
+        <navbar class="header-nav pt-4">
+            <ul class="header-list d-flex">
+                <li>
+                    <a href="/" class="nav-a m-3">home</a>
+                </li>
+                <li>
+                    <a href="/?route=site/products" class="nav-a m-3">shop</a>
+                </li>
+            </ul>
+        </navbar>
+        <div class="header-logo">
+            <a href="/"><img src="/static/img/qwewwq.png" alt="logo" class="heavy-logo"></a>
+        </div>
+        <navbar class="header-nav pt-4">
 
-                <?php if(!\models\User::isLoggedIn()) :?>
+            <?php if(!\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
                     <li>
                         <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
-                        <?php 
-                        $cart = new \models\Cart();
-                        $quantity = $cart->getTotalQuantity();
-                        $display_quantity = '';
-
-                        if ($quantity == 0) {
-                            $display_quantity = '0';
-                        } elseif ($quantity > 0 && $quantity <= 9) {
-                            $display_quantity = $quantity;
-                        } else {
-                            $display_quantity = '9+';
-                        }
-                        ?>
-                        <p class="cart-quantity"><?php echo $display_quantity; ?></p>
+                        <p class="cart-quantity" id="cart-count">
+                            <?php
+                            $cart = new \models\Cart();
+                            $quantity = $cart->getTotalQuantity();
+                            echo $quantity;
+                            ?>
+                        </p>
                     </li>
                     <li>
                         <a href="/?route=users/login" class="header-list m-3">login</a>
                     </li>
-<!--                    <li>-->
-<!--                        <a href="/?route=users/register" class="header-list m-3">register</a>-->
-<!--                    </li>-->
                 </ul>
-                <?php endif;?>
+            <?php endif;?>
 
-                <?php if(\models\User::isLoggedIn()) :?>
+            <?php if(\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
                     <li>
                         <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
-                        <?php 
-                        $cart = new \models\Cart();
-                        $quantity = $cart->getTotalQuantity();
-                        $display_quantity = '';
-
-                        if ($quantity == 0) {
-                            $display_quantity = '0';
-                        } elseif ($quantity > 0 && $quantity <= 9) {
-                            $display_quantity = $quantity;
-                        } else {
-                            $display_quantity = '9+';
-                        }
-                        ?>
-                        <p class="cart-quantity"><?php echo $display_quantity; ?></p>
+                        <p class="cart-quantity" id="cart-count">
+                            <?php
+                            $cart = new \models\Cart();
+                            $quantity = $cart->getTotalQuantity();
+                            echo $quantity;
+                            ?>
+                        </p>
                     </li>
                     <li>
                         <a href="/?route=users/profile" class="header-list m-3">profile</a>
                     </li>
                     <?php if(isset($_SESSION['user']) && $_SESSION['user']['is_admin']): ?>
-                    <li>
-                        <a href="/?route=admin/index" class="header-list m-3">admin panel</a>
-                    </li>
+                        <li>
+                            <a href="/?route=admin/index" class="header-list m-3">admin panel</a>
+                        </li>
                     <?php endif; ?>
-<!--                    <li>-->
-<!--                        <a href="/users/logout" class="header-list m-3">logout</a>-->
-<!--                    </li>-->
                 </ul>
-                <?php endif;?>
+            <?php endif;?>
 
-            </navbar>
-        </div>
-    </header>
-
-<!--    <main class="flex-grow-1 d-flex align-items-center justify-content-center">-->
-<!--        <div class="container">-->
-<!--            --><?php //=$Content ?>
-<!--        </div>-->
-<!--    </main>-->
-    <div class="container">
-        <?=$Content ?>
+        </navbar>
     </div>
+</header>
 
-    <?php
-    $currentModule = \classes\Core::getInstance()->module;
-    $currentAction = \classes\Core::getInstance()->action;
-    $isAdminOrderPage = $currentModule === 'order' && in_array($currentAction, ['index', 'view', 'edit']);
-    if ($currentModule !== 'product' && $currentModule !== 'category' && !$isAdminOrderPage):
+<div class="container">
+    <?=$Content ?>
+</div>
+
+<?php
+$currentModule = \classes\Core::getInstance()->module;
+$currentAction = \classes\Core::getInstance()->action;
+$isAdminOrderPage = $currentModule === 'order' && in_array($currentAction, ['index', 'view', 'edit']);
+if ($currentModule !== 'product' && $currentModule !== 'category' && !$isAdminOrderPage):
     ?>
     <img src="/static/img/frame1.png" class="frame1" alt="">
     <img src="/static/img/frame2.png" class="frame2" alt="">
     <img src="/static/img/frame3.png" class="frame3" alt="">
     <img src="/static/img/frame4.png" class="frame4" alt="">
-    <?php endif; ?>
+<?php endif; ?>
 
-<!--    <footer class="mt-auto flex-shrink-0">-->
-<!--        <div class="container nav justify-content-center border-top pb-3 mb-3">-->
-<!--            2025 Hell Session Store-->
-<!--        </div>-->
-<!--    </footer>-->
-
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/cart.js"></script>
 </body>
 </html>

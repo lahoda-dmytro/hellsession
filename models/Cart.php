@@ -28,9 +28,13 @@ class Cart {
         }
 
         if ($override_quantity) {
-            $this->cart[$product_id_key]['quantity'] = $quantity;
+            $this->cart[$product_id_key]['quantity'] = (int)$quantity;
         } else {
-            $this->cart[$product_id_key]['quantity'] += $quantity;
+            $this->cart[$product_id_key]['quantity'] += (int)$quantity;
+        }
+
+        if ($this->cart[$product_id_key]['quantity'] < 0) {
+            $this->cart[$product_id_key]['quantity'] = 0;
         }
         $this->save();
     }
@@ -48,19 +52,28 @@ class Cart {
     }
 
     public function getItems() {
-        $items = [];
+        $items_with_product_data = [];
         foreach ($this->cart as $product_id_str => $item) {
-            $items[] = [
-                'product_id' => (int)$product_id_str,
-                'quantity' => (int)$item['quantity'],
-                'price' => (float)$item['price']
-            ];
+            $product = Product::getById((int)$product_id_str);
+            if ($product) {
+                $items_with_product_data[] = [
+                    'product_id' => (int)$product_id_str,
+                    'quantity' => (int)$item['quantity'],
+                    'price' => (float)$item['price'],
+                    'product_data' => $product
+                ];
+            } else {
+                $this->remove((int)$product_id_str);
+            }
         }
-        return $items;
+        return $items_with_product_data;
     }
 
     public function getTotalQuantity() {
-        $total = array_sum(array_column($this->cart, 'quantity'));
+        $total = 0;
+        if (isset($this->cart) && is_array($this->cart)) {
+            $total = array_sum(array_column($this->cart, 'quantity'));
+        }
         return $total > 0 ? $total : 0;
     }
 
@@ -71,9 +84,11 @@ class Cart {
 
     public function getTotalPrice() {
         $total = 0;
-        foreach ($this->cart as $item) {
-            $total += (float)$item['price'] * (int)$item['quantity'];
+        if (isset($this->cart) && is_array($this->cart)) {
+            foreach ($this->cart as $item) {
+                $total += (float)$item['price'] * (int)$item['quantity'];
+            }
         }
         return number_format($total, 2, '.', '');
     }
-} 
+}

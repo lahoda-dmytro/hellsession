@@ -10,6 +10,11 @@
 static/
 public/
 uploads/
+cache/
+vendor/
+composer.json
+composer.lock
+
 
 # AWS User-specific
 .idea/**/aws.xml

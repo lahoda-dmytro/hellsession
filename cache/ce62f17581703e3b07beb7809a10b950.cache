@@ -1,0 +1,127 @@
+a:2:{s:4:"data";a:2:{s:5:"Title";s:8:"Products";s:7:"Content";s:8911:"
+<div class="llist d-flex">
+    <div class="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li class="selected">
+                <a href="/?route=site/products">All</a>
+            </li>
+                            <li >
+                    <a href="/?route=site/products&category=necklaces">
+                        Necklaces                    </a>
+                </li>
+                            <li >
+                    <a href="/?route=site/products&category=earrings">
+                        Earrings                    </a>
+                </li>
+                            <li >
+                    <a href="/?route=site/products&category=bracelets">
+                        Bracelets                    </a>
+                </li>
+                            <li >
+                    <a href="/?route=site/products&category=rings">
+                        Rings                    </a>
+                </li>
+                    </ul>
+    </div>
+    <div class="main">
+        <div class="main-title">
+            Products        </div>
+        <div class="product-list">
+            <div class="items">
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/vampire's-eye-(p966)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/vampire&#039;s-eye-(p966)/6845ff4a85341.jpg" class="card-img" alt="Vampire&#039;s Eye (P966)">
+                                                        <h5 class="title-card">Vampire&#039;s Eye (P966)</h5>
+                                                            <p class="price">$ 38.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/cross-of-baphomet-(p952)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/cross-of-baphomet-(p952)/6843238d776b6.jpg" class="card-img" alt="CROSS OF BAPHOMET (P952)">
+                                                        <h5 class="title-card">CROSS OF BAPHOMET (P952)</h5>
+                                                            <p class="price">$ 43.95</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/p907-mon-amour-de-soubise-necklace" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/p907-mon-amour-de-soubise-necklace/68432375a2f39.jpg" class="card-img" alt="P907 Mon Amour de Soubise Necklace">
+                                                        <h5 class="title-card">P907 Mon Amour de Soubise Necklace</h5>
+                                                            <p class="price">$ 54.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/desire-moi-(p926)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/desire-moi-(p926)/6843236957158.jpg" class="card-img" alt="DESIRE MOI (P926)">
+                                                        <h5 class="title-card">DESIRE MOI (P926)</h5>
+                                                            <p class="price">$ 49.95</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/black-widow-(p432b)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/black-widow-(p432b)/6843235ee96e7.jpg" class="card-img" alt="BLACK WIDOW (P432B)">
+                                                        <h5 class="title-card">BLACK WIDOW (P432B)</h5>
+                                                            <p class="price">$ 54.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/cross-of-the-dark-kiss-(p975)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/cross-of-the-dark-kiss-(p975)/6843234977a62.jpg" class="card-img" alt="Cross of the Dark Kiss (P975)">
+                                                        <h5 class="title-card">Cross of the Dark Kiss (P975)</h5>
+                                                            <p class="price">$ 52.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/reina-wycca-(p969)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/reina-wycca-(p969)/684350ecee713.jpg" class="card-img" alt="Reina Wycca (P969)">
+                                                        <h5 class="title-card">Reina Wycca (P969)</h5>
+                                                            <div class="cart-discount d-flex gap-2">
+                                    <p class="line">$ 51.00</p>
+                                    <p class="price pt-2">$ 45.90</p>
+                                </div>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/eternal-peace-(p971)" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/січммчсм/6842dc36a3a70_churchyadsdrd.jpg" class="card-img" alt="Eternal Peace (P971)">
+                                                        <h5 class="title-card">Eternal Peace (P971)</h5>
+                                                            <p class="price">$ 90.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/qwerty" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/qwerty/6842db6abd6ed_wild-black-rose-bangle.jpg" class="card-img" alt="qwerty">
+                                                        <h5 class="title-card">qwerty</h5>
+                                                            <p class="price">$ 85.00</p>
+                                                    </a>
+                    </div>
+                                    <div class="item">
+                        <a href="/?route=site/product_detail/wild-black-rose-bangle" class="home-card d-flex flex-column align-items-center text-center qform">
+                                                            <img src="/uploads/products/wild-black-rose-bangle/68432330e0497.jpg" class="card-img" alt="Wild Black Rose Bangle">
+                                                        <h5 class="title-card">Wild Black Rose Bangle</h5>
+                                                            <p class="price">$ 57.95</p>
+                                                    </a>
+                    </div>
+                            </div>
+        </div>
+                    <ul class="pagination">
+                <li class="disabled">
+                    <a href="#">Previous</a>
+                </li>
+                                    <li>
+                        <a href="/?route=site/products&page=1" 
+                           class="disabled">
+                            1                        </a>
+                    </li>
+                                    <li>
+                        <a href="/?route=site/products&page=2" 
+                           class="">
+                            2                        </a>
+                    </li>
+                                <li class="">
+                    <a href="/?route=site/products&page=2">Next</a>
+                </li>
+            </ul>
+            </div>
+    <div class="mainvl"></div>
+</div> ";}s:7:"expires";i:1749499640;}
