@@ -13,6 +13,15 @@
 
 <h1><?= htmlspecialchars($Title ?? 'Products') ?></h1>
 
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <a href="/?route=admin/index" class="nav-a">← До адмін панелі</a>
+    </div>
+    <div>
+        <a href="/?route=product/add" class="btn-secondary form-stylereg d-flex ">+ Додати товар</a>
+    </div>
+</div>
 
 <table class="table table-hover">
     <thead>
@@ -33,16 +42,11 @@
             <td><?= htmlspecialchars($categoryMap[$product->category_id]->name ?? 'Невідома категорія') ?></td>
             <td>
                 <a href="/?route=product/view/<?= $product->slug ?>">Перегляд</a>
-                <?php if ($isAdmin): ?>
                     | <a href="/?route=product/edit/<?= $product->slug ?>">Редагувати</a>
                     | <a href="/?route=product/delete/<?= $product->slug ?>" onclick="return confirm('Видалити товар?')">Видалити</a>
-                <?php endif; ?>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<?php if (!empty($isAdmin)): ?>
-    <a href="/?route=product/add" class="btn-secondary form-stylereg d-flex ">+ Додати товар</a>
-<?php endif; ?>
 

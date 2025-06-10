@@ -105,29 +105,67 @@ class Core {
 
     public function error(int $code): void {
         $this->httpStatusCode = $code;
+
         ob_clean();
         http_response_code($code);
 
         try {
-            $errorTemplate = new Template("views/error/{$code}.php");
             $errorMessage = "Something went wrong! Error: {$code}.";
-            if ($code === 404) {
-                $errorMessage = "Page not found.";
-            }
-            elseif ($code === 500) {
-                $errorMessage = "Internal server error.";
-            }
-            $errorTemplate->addParam('errorMessage', $errorMessage);
+            $pageTitle = "Error " . $code;
 
-            $errorTemplate->display();
-        }
-        catch (\RuntimeException $e) {
-            error_log("Error template not found or rendering failed: " . $e->getMessage());
+            switch ($code) {
+                case 401:
+                    $errorMessage = "You need to be authenticated to access this resource.";
+                    $pageTitle = "401 Unauthorized";
+                    break;
+                case 403:
+                    $errorMessage = "You don't have permission to access this resource.";
+                    $pageTitle = "403 Forbidden";
+                    break;
+                case 404:
+                    $errorMessage = "The page you are looking for does not exist.";
+                    $pageTitle = "404 Not Found";
+                    break;
+                case 405:
+                    $errorMessage = "The requested method is not allowed for this URL.";
+                    $pageTitle = "405 Method Not Allowed";
+                    break;
+                case 500:
+                    $errorMessage = "An internal server error occurred.";
+                    $pageTitle = "500 Internal Server Error";
+                    break;
+                default:
+                    $errorMessage = "An unexpected error occurred. Error Code: " . $code;
+                    $pageTitle = "Error " . $code;
+                    break;
+            }
+
+            $errorContentTemplatePath = "views/error/{$code}.php";
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $errorContentTemplatePath)) {
+                $errorContentTemplatePath = "views/error/default.php";
+                if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $errorContentTemplatePath)) {
+                    throw new \RuntimeException("Default error template not found!");
+                }
+            }
+
+            $templateForErrorContent = new Template($errorContentTemplatePath);
+            $templateForErrorContent->addParam('errorMessage', $errorMessage);
+            $renderedErrorContent = $templateForErrorContent->render();
+
+            $this->mainTemplate->addParam('Title', $pageTitle);
+            $this->mainTemplate->addParam('Content', $renderedErrorContent);
+            $this->mainTemplate->addParam('isErrorPage', true);
+
+            $this->mainTemplate->display();
+
+        } catch (\Throwable $e) {
+            error_log("Critical error during error page rendering: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine());
             if (!headers_sent()) {
                 http_response_code($code);
             }
-            echo "<h1>Error {$code}</h1><p>An unexpected error occurred.</p>";
+            echo "<h1>Error {$code}</h1><p>An unexpected error occurred while trying to display the error page. Please try again later.</p>";
         }
         die;
     }
+
 }

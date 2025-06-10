@@ -20,6 +20,7 @@ class CategoryController extends Controller
 
     public function indexAction(): array
     {
+        $this->checkAdminAccess();
         $categories = Category::getCategories();
 
         $this->addData([

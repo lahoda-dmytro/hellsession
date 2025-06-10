@@ -16,10 +16,6 @@ use classes\Post;
  * @property string $joined_date
  * @property string|null $last_login
  * @property int $is_superuser (0 user, 1 admin)
- * @property string|null $permissions
- * @property string $status  ('active', 'inactive', 'blocked', 'pending_verification')
- * @property string|null $verification_token
- * @property string|null $password_reset_token
  * @property string $created_at
  * @property string $updated_at
  */
@@ -77,26 +73,33 @@ class User extends Model {
             || static::findOneWhere(['email' => $email]) !== null;
     }
     public function register(array $data): bool {
-        $this->first_name = $data['first_name'] ?? '';
-        $this->last_name = $data['last_name'] ?? '';
-        $this->username = $data['username'] ?? '';
-        $this->email = $data['email'] ?? '';
-        $this->password = password_hash($data['password'], PASSWORD_BCRYPT);
-        $this->joined_date = date('Y-m-d H:i:s');
-        $this->status = 'active';
+        try {
+            $this->first_name = $data['first_name'] ?? '';
+            $this->last_name = $data['last_name'] ?? '';
+            $this->username = $data['username'] ?? '';
+            $this->email = $data['email'] ?? '';
+            $this->password = password_hash($data['password'], PASSWORD_BCRYPT);
+            $this->joined_date = date('Y-m-d H:i:s');
+            $this->created_at = date('Y-m-d H:i:s');
+            $this->updated_at = date('Y-m-d H:i:s');
 
-        if ($this->save()) {
-            $this->loginUserIntoSession($this);
+            if ($this->save()) {
+                $this->loginUserIntoSession($this);
 
-            try {
-                $this->last_login = date('Y-m-d H:i:s');
-                $this->save();
-            } catch (\Throwable $e) {
-                error_log("Error setting last_login after registration: " . $e->getMessage());
+                try {
+                    $this->last_login = date('Y-m-d H:i:s');
+                    $this->save();
+                } catch (\Throwable $e) {
+                    error_log("Error setting last_login after registration: " . $e->getMessage());
+                }
+
+                return true;
             }
-
-            return true;
+            error_log("Failed to save user during registration");
+            return false;
+        } catch (\Throwable $e) {
+            error_log("Error during user registration: " . $e->getMessage());
+            return false;
         }
-        return false;
     }
 }

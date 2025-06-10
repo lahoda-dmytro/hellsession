@@ -81,6 +81,8 @@ class ProductController extends Controller
     }
 
     public function indexAction(): array {
+        $this->checkAdminAccess();
+
         $products = Product::getAll();
         $categories = Category::getCategories();
 

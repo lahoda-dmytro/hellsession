@@ -57,24 +57,28 @@ error_reporting(E_ALL);
 
             <?php if(\models\User::isLoggedIn()) :?>
                 <ul class="header-list d-flex">
-                    <li>
-                        <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
-                        <p class="cart-quantity" id="cart-count">
-                            <?php
-                            $cart = new \models\Cart();
-                            $quantity = $cart->getTotalQuantity();
-                            echo $quantity;
-                            ?>
-                        </p>
-                    </li>
+                    <?php
+                    $currentUser = \models\User::getCurrentUser();
+                    if ($currentUser && $currentUser->is_superuser):
+                    ?>
+                        <li>
+                            <a href="/?route=admin/index" class="nav-a m-3">admin</a>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <a href="/?route=cart/show"><img src="/static/img/grob.png" class="grob" alt="cart"></a>
+                            <p class="cart-quantity" id="cart-count">
+                                <?php
+                                $cart = new \models\Cart();
+                                $quantity = $cart->getTotalQuantity();
+                                echo $quantity;
+                                ?>
+                            </p>
+                        </li>
+                    <?php endif; ?>
                     <li>
                         <a href="/?route=users/profile" class="header-list m-3">profile</a>
                     </li>
-                    <?php if(isset($_SESSION['user']) && $_SESSION['user']['is_admin']): ?>
-                        <li>
-                            <a href="/?route=admin/index" class="header-list m-3">admin panel</a>
-                        </li>
-                    <?php endif; ?>
                 </ul>
             <?php endif;?>
 
@@ -90,7 +94,7 @@ error_reporting(E_ALL);
 $currentModule = \classes\Core::getInstance()->module;
 $currentAction = \classes\Core::getInstance()->action;
 $isAdminOrderPage = $currentModule === 'order' && in_array($currentAction, ['index', 'view', 'edit']);
-if ($currentModule !== 'product' && $currentModule !== 'category' && !$isAdminOrderPage):
+if (($currentModule !== 'product' && $currentModule !== 'category' && !$isAdminOrderPage) || ($isErrorPage ?? false)):
     ?>
     <img src="/static/img/frame1.png" class="frame1" alt="">
     <img src="/static/img/frame2.png" class="frame2" alt="">

@@ -1,5 +1,13 @@
 <h1><?= htmlspecialchars($Title ?? 'Категорії') ?></h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
+        <a href="/?route=admin/index" class="nav-a">← До адмін панелі</a>
+    </div>
+    <div>
+        <a href="/?route=category/add" class="btn-secondary form-stylereg d-flex ">+ Додати категорію</a>
+    </div>
+</div>
 <?php if (!empty($categories)): ?>
     <table class="table table-hover">
         <thead>
@@ -38,6 +46,3 @@
     <div class="alert alert-warning">Категорій не знайдено.</div>
 <?php endif; ?>
 
-<?php if (!empty($isAdmin)): ?>
-    <a href="/?route=category/add" class="btn-secondary form-stylereg d-flex ">+ Додати категорію</a>
-<?php endif; ?>

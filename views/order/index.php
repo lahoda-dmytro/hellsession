@@ -6,7 +6,9 @@
 ?>
 
 <h1><?= htmlspecialchars($Title ?? 'Замовлення') ?></h1>
-
+<div>
+    <a href="/?route=admin/index" class="nav-a">← До адмін панелі</a>
+</div>
 <table class="table table-hover">
     <thead>
     <tr>

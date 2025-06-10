@@ -8,7 +8,6 @@
 
 <div class="forcreate">
     <div class="d-flex flex-wrap">
-
         <div class="windowp d-flex bg-white p-4 mb-4 mx-2 rounded flex-grow-1">
             <div class="row">
                 <div class="col-md-7">

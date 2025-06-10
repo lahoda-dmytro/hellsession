@@ -1,18 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>404 Not Found</title>
-</head>
-<body>
-    <h1>Помилка 404 - Сторінка не знайдена</h1>
-    <p>На жаль, запитувана вами сторінка не існує.</p>
-    <?php if (isset($errorMessage)): ?>
-        <p>Деталі: <?php echo htmlspecialchars($errorMessage); ?></p>
-    <?php endif; ?>
-    <p><a href="/">Повернутися на головну</a></p>
-</body>
-</html>
+<?php
+/**
+ * @var string $errorMessage
+ */
+?>
+<section class="error-section d-flex flex-column align-items-center justify-content-center text-center py-5">
+    <h1 style="font-size: 6em; margin-bottom: 0;">404</h1>
+    <h2>Page Not Found</h2>
+    <p class="lead mt-3"><?php echo htmlspecialchars($errorMessage); ?></p>
+    <p>We're sorry, but the page you were looking for could not be found.</p>
+    <a href="/" class="btn">Go to Homepage</a>
+</section>
