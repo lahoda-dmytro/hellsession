@@ -26,7 +26,7 @@
     </div>
 
     <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger">
+        <div class="alert">
             <ul class="mb-0">
                 <?php foreach ($errors as $error): ?>
                     <li><?= htmlspecialchars($error) ?></li>

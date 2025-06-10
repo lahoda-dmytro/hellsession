@@ -147,6 +147,10 @@ class ProductController extends Controller
                 $errors[] = 'Назва товару є обов\'язковою.';
             }
 
+            if (!empty($name) && Product::getBySlug($slug)) {
+                $errors[] = 'Товар з такою назвою (slug) вже існує.';
+            }
+
             if (empty($errors)) {
                 $product = Product::addProduct($data);
                 if ($product) {

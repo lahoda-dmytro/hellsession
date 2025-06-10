@@ -37,7 +37,7 @@ foreach ($orderItems as $item) {
     <p class="mb-4">Дата створення: <?= date('F d, Y \a\t H:i', strtotime($order->created_at)) ?> | <?= $totalItems ?> item<?= ($totalItems > 1) ? 's' : '' ?></p>
 
     <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger">
+        <div class="alert ">
             <ul class="mb-0">
                 <?php foreach ($errors as $error): ?>
                     <li><?= htmlspecialchars($error) ?></li>

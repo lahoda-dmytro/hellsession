@@ -39,6 +39,9 @@
                             name="last_name" placeholder="Your Last Name" value="<?php echo htmlspecialchars($form_data['last_name'] ?? ''); ?>"
                             required>
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <button type="submit" class="login-btn  d-flex d-block form-control form-styleprofile">Save</button>
+                        </div>
                     </div>
                     <div class="col-md-6 ps-md-2">
                         <div class="col-md-12 mb-3">
@@ -53,11 +56,10 @@
                             name="email" placeholder="Your Email" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>"
                             required>
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <a class="login-btn  d-flex d-block form-control form-styleprofile" href="/?route=users/logout">Logout</a>
+                        </div>
                     </div>
-                </div>
-                <div class="btns d-flex gap-4 mt-4">
-                    <button type="submit" class="profile-btn">Save</button>
-                    <a class="profile-btn" href="/?route=users/logout">Logout</a>
                 </div>
             </form>
             <div class="orders flex-grow-1 ms-4">

@@ -6,22 +6,19 @@
 ?>
 
 <div class="forcreate py-5">
-    <h1 class="text-center mb-5 "><?= htmlspecialchars($Title) ?></h1>
+    <h1 class=" mb-2 "><?= htmlspecialchars($Title) ?></h1>
 
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+        <div class="">
             <div class="list-group">
-                <a href="/?route=product/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    Управління товарами
-                    <span class="btn">Редагувати, додавати, видаляти</span>
+                <a href="/?route=product/index" class="login-btn  d-flex d-block form-control form-styleprofile">
+                    products
                 </a>
-                <a href="/?route=category/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    Управління категоріями
-                    <span class="btn">Редагувати, додавати, видаляти</span>
+                <a href="/?route=category/index" class="login-btn  d-flex d-block form-control form-styleprofile">
+                    categories
                 </a>
-                <a href="/?route=order/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    Управління замовленнями
-                    <span class="btn">Переглядати, редагувати</span>
+                <a href="/?route=order/index" class="login-btn  d-flex d-block form-control form-styleprofile">
+                    orders
                 </a>
             </div>
         </div>

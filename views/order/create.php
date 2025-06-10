@@ -14,7 +14,7 @@
                     <form action="/?route=order/create" method="post" class="order-form">
                         <h2 class="mb-2">Create Order</h2>
                         <?php if (!empty($errors)): ?>
-                            <div class="alert alert-danger">
+                            <div class="alert">
                                 <ul>
                                     <?php foreach ($errors as $error): ?>
                                         <li><?php echo htmlspecialchars($error); ?></li>
