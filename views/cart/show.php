@@ -40,9 +40,7 @@
                         <button type="button" class="remove-btn">Remove</button>
                         <div class="cart-card-price">
                             <?php
-                            // Ціна товару з БД
                             $product_base_price = $product->price;
-                            // Ціна товару зі знижкою з БД
                             $product_discounted_price = $product->price * (1 - $product->discount_percentage / 100);
                             ?>
                             <?php if ($product->discount_percentage > 0): ?>

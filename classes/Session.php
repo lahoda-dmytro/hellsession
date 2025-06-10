@@ -3,6 +3,8 @@
 namespace classes;
 
 class Session {
+    private static ?Session $instance = null;
+
     public function set(string $key, $value): void {
         $_SESSION[$key] = $value;
     }
@@ -25,4 +27,12 @@ class Session {
     public function isLoggedIn(): bool {
         return $this->get('user_id') !== null;
     }
+
+    public static function getInstance(): Session {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
 }

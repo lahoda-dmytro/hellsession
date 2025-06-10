@@ -4,6 +4,10 @@ namespace classes;
 
 class JsonResponse {
     public static function send($data, int $statusCode = 200) {
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
         echo json_encode($data);

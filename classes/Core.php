@@ -11,6 +11,8 @@ class Core {
     protected Template $mainTemplate;
     public Session $session;
 
+    public int $httpStatusCode = 200;
+
     private function __construct() {
 
         $config = Config::getInstance();
@@ -42,7 +44,9 @@ class Core {
     }
 
     public function init(): void {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     public function run(): void {
@@ -52,24 +56,19 @@ class Core {
         if (empty($route_parts[0])) {
             $this->module = 'site';
             $this->action = 'index';
-
             $params = [];
         }
         else {
             $this->module = array_shift($route_parts);
             $this->action = array_shift($route_parts) ?? 'index';
-
             $params = $route_parts;
         }
-
 
         $class_name = 'controllers\\' . ucfirst($this->module) . 'Controller';
         $method = $this->action . 'Action';
 
-
         if (!class_exists($class_name)) {
             $this->error(404);
-            return;
         }
 
         try {
@@ -78,13 +77,10 @@ class Core {
         catch (\Throwable $e) {
             error_log("Error creating controller '{$class_name}': " . $e->getMessage());
             $this->error(500);
-            return;
         }
-
 
         if (!method_exists($controller, $method)) {
             $this->error(404);
-            return;
         }
 
         try {
@@ -93,7 +89,6 @@ class Core {
         catch (\Throwable $e) {
             error_log("Error executing controller method '{$class_name}::{$method}': " . $e->getMessage());
             $this->error(500);
-            return;
         }
 
         if (!is_array($data)) {
@@ -102,14 +97,15 @@ class Core {
         }
 
         $this->mainTemplate->addParams($data);
-
-    }
-
-    public function done(): void {
         $this->mainTemplate->display();
     }
 
+    public function done(): void {
+    }
+
     public function error(int $code): void {
+        $this->httpStatusCode = $code;
+        ob_clean();
         http_response_code($code);
 
         try {
@@ -123,7 +119,6 @@ class Core {
             }
             $errorTemplate->addParam('errorMessage', $errorMessage);
 
-            ob_clean();
             $errorTemplate->display();
         }
         catch (\RuntimeException $e) {
