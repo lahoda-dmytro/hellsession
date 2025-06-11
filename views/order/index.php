@@ -6,8 +6,10 @@
 ?>
 
 <h1><?= htmlspecialchars($Title ?? 'Замовлення') ?></h1>
-<div>
-    <a href="/?route=admin/index" class="nav-a">← До адмін панелі</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a href="/?route=admin/index" class="nav-a">← До адмін панелі</a>
+    </div>
 </div>
 <table class="table table-hover">
     <thead>

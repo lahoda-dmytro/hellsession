@@ -20,6 +20,9 @@
                 <a href="/?route=order/index" class="login-btn  d-flex d-block form-control form-styleprofile">
                     orders
                 </a>
+                <a href="/" class="btn justify-content-center d-flex d-block form-control form-styleprofile py-3">
+                    Go to Homepage
+                </a>
             </div>
         </div>
     </div>
