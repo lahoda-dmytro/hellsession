@@ -25,7 +25,7 @@ class PaymentController extends Controller
         $order = Order::find($orderId);
 
         if (!$order || $order->paid) {
-            header('Location: /?route=order/created'); // Redirect if order not found or already paid
+            header('Location: /?route=order/created');
             exit;
         }
 
@@ -42,7 +42,7 @@ class PaymentController extends Controller
                         'product_data' => [
                             'name' => $product->name,
                         ],
-                        'unit_amount' => (int)($item->price * 100), // Convert to cents
+                        'unit_amount' => (int)($item->price * 100),
                     ],
                     'quantity' => $item->quantity,
                 ];
@@ -51,7 +51,7 @@ class PaymentController extends Controller
         }
 
         if (empty($line_items)) {
-            Core::getInstance()->error(500); // Or redirect to an error page
+            Core::getInstance()->error(500);
             exit;
         }
 
@@ -100,7 +100,7 @@ class PaymentController extends Controller
                 if ($order && !$order->paid) {
                     $order->paid = true;
                     $order->save();
-                    unset($_SESSION['order_id']); // Clear order from session after successful payment
+                    unset($_SESSION['order_id']);
                 }
             }
 

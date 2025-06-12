@@ -7,12 +7,11 @@ use classes\Core;
 
 class SiteController extends Controller {
     public function indexAction(): array {
-        //var_dump($_SESSION);
 
         $discountedProducts = \models\Product::getDiscountedProducts();
 
         $this->addData([
-            'message' => 'welcome to main page',
+            'message' => 'main page',
             'title' => 'hell session',
             'discountedProducts' => $discountedProducts
         ]);

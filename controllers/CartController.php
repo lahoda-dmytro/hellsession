@@ -167,47 +167,6 @@ class CartController extends Controller {
         }
     }
 
-    public function addAction(string $slug): void {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /?route=users/login');
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $quantity = $_POST['quantity'] ?? 1;
-            $override = isset($_POST['override']) && $_POST['override'] === 'true';
-
-            $product = Product::getBySlug($slug);
-            if ($product) {
-                $price_to_add = $product->price;
-                if ($product->discount_percentage > 0) {
-                    $price_to_add = $product->price * (1 - $product->discount_percentage / 100);
-                }
-                $this->cart->add($product->id, $price_to_add, $quantity, $override);
-            }
-        }
-
-        header('Location: /?route=cart/show');
-        exit;
-    }
-
-    public function removeAction(string $slug): void {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /?route=users/login');
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $product = Product::getBySlug($slug);
-            if ($product) {
-                $this->cart->remove($product->id);
-            }
-        }
-
-        header('Location: /?route=cart/show');
-        exit;
-    }
-
     public function showAction(): array {
         if (!isset($_SESSION['user_id'])) {
             header('Location: /?route=users/login');
@@ -224,16 +183,5 @@ class CartController extends Controller {
         ]);
 
         return $this->view('cart/show', $this->data);
-    }
-
-    public function clearAction(): void {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /?route=users/login');
-            exit;
-        }
-
-        $this->cart->clear();
-        header('Location: /?route=cart/show');
-        exit;
     }
 }
