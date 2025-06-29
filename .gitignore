@@ -106,3 +106,4 @@ fabric.properties
 
 # Azure Toolkit for IntelliJ plugin
 .idea/**/azureSettings.xml
+test/
