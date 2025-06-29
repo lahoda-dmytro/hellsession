@@ -14,6 +14,7 @@ cache/
 vendor/
 composer.json
 composer.lock
+report/
 
 
 # AWS User-specific
